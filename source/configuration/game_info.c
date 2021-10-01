@@ -1,6 +1,6 @@
 // A bunch of information about your game - used on the title screen, as well as 
 // the credits, and anywhere else you fancy!
-const unsigned char gameName[] = "Quirk's Adventure";
-const unsigned char gameAuthor[] = "YOU!";
-const unsigned char gameAuthorContact[] = "Tweet at us! @your_twitter";
-const unsigned char currentYear[] = "2018";
+const unsigned char gameName[] = "Some LD49 Game";
+const unsigned char gameAuthor[] = "cppchriscpp";
+const unsigned char gameAuthorContact[] = "Made in 48 hours for LDJam";
+const unsigned char currentYear[] = "2021";
