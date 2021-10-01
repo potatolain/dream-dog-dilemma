@@ -12,6 +12,7 @@
 #include "source/graphics/hud.h"
 #include "source/graphics/game_text.h"
 #include "source/sprites/map_sprites.h"
+#include "source/graphics/fade_animation.h"
 
 CODE_BANK(PRG_BANK_PLAYER_SPRITE);
 
@@ -319,6 +320,16 @@ void test_player_tile_collision(void) {
 
 }
 
+void do_layer_anim(unsigned char toLayer) {
+    sfx_play(SFX_EVERT, SFX_CHANNEL_1);
+    fade_out();
+    currentLayer = toLayer;
+    // Force a sprite refresh to avoid a flash of the old state
+    update_map_sprites();
+    // TODO: some shit
+    fade_in();
+}
+
 void handle_player_sprite_collision(void) {
     // We store the last sprite hit when we update the sprites in `map_sprites.c`, so here all we have to do is react to it.
     if (lastPlayerSpriteCollisionId != NO_SPRITE_HIT) {
@@ -428,6 +439,16 @@ void handle_player_sprite_collision(void) {
                 break;
             case SPRITE_TYPE_ENDGAME:
                 gameState = GAME_STATE_CREDITS;
+                break;
+            case SPRITE_TYPE_RADIO:
+                if (controllerState & PAD_A) {
+
+                    if (currentLayer == currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_HEALTH]) {
+                        do_layer_anim(currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED]);
+                    } else if (currentLayer == currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED]) {
+                        do_layer_anim(currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_HEALTH]);
+                    }
+                }
                 break;
             case SPRITE_TYPE_NPC:
                 // Okay, we collided with this NPC before we calculated the player's movement. After being moved, does the 

@@ -63,6 +63,9 @@
 #define SFX_GAMEOVER 3
 #define SFX_WIN 4
 
+// NEW STUFF NOT MADE YET
+#define SFX_EVERT 4
+
 // Constants for sfx channels. Completely unnecessary but it's easier to read
 #define SFX_CHANNEL_1 0
 #define SFX_CHANNEL_2 1

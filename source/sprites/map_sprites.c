@@ -81,6 +81,13 @@ void update_map_sprites(void) {
             continue;
         }
 
+        if (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_RADIO) {
+            if (currentLayer != currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_HEALTH] && currentLayer != currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED]) {
+                // If it's not in this dimension, make the radio transparent (and useless)
+                currentSpriteTileId += 2;
+            }
+        }
+
         switch (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_ANIMATION_TYPE]) {
             case SPRITE_ANIMATION_SWAP:
 
