@@ -24,8 +24,8 @@ void draw_win_screen(void) {
     // Add whatever you want here; NTADR_A just picks a position on the screen for you. Your options are 0, 0 to 32, 30
     put_str(NTADR_A(7, 2), "- Congratulations -");
 
-    put_str(NTADR_A(4, 8), "You did the thing, and");
-    put_str(NTADR_A(4, 9), "thus won the game!");
+    put_str(NTADR_A(4, 8), "You escaped the corrupted");
+    put_str(NTADR_A(4, 9), "world and made it home!");
 
     // Hide all existing sprites
     oam_clear();
@@ -48,20 +48,20 @@ void draw_credits_screen(void) {
     // Add whatever you want here; NTADR_A just picks a position on the screen for you. Your options are 0, 0 to 32, 30
     put_str(NTADR_A(11, 2), "- Credits -");
 
-    put_str(NTADR_A(2, 6), "Game Design and Logic");
+    put_str(NTADR_A(2, 6), "Game Logic/Art/Everything");
     put_str(NTADR_A(4, 8), gameAuthor);
 
-    put_str(NTADR_A(2, 11), "Music");
-    put_str(NTADR_A(4, 13), "Wolfgang (OpenGameArt)");
+    put_str(NTADR_A(2, 11), "Tools Used");
+    put_str(NTADR_A(4, 13), "nes-starter-kit");
+    put_str(NTADR_A(4, 14), "2Bit Tile Generator");
+    put_str(NTADR_A(4, 15), "2BitCharactersGenerator");
+    put_str(NTADR_A(4, 16), "Famitracker");
+    put_str(NTADR_A(4, 17), "NEXXT Editor");
+    put_str(NTADR_A(4, 18), "Tiled");
 
-    put_str(NTADR_A(2, 16), "Artwork");
-    put_str(NTADR_A(4, 18), "Refresh Games (OpenGameArt)");
 
-    put_str(NTADR_A(6, 24), "Created in");
-    put_str(NTADR_A(17, 24), currentYear);
-    put_str(NTADR_A(22, 24), "by");
-
-    put_str(NTADR_A(8, 26), gameAuthor);
+    put_str(NTADR_A(4, 24), "Created in 48 hours for");
+    put_str(NTADR_A(8, 26), "Ludum Dare 49");
 
 
     // Hide all existing sprites

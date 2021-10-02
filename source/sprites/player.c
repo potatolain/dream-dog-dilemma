@@ -194,8 +194,27 @@ void damage_player(unsigned char dmg, unsigned char doBounceAndSfx) {
         sfx_play(SFX_HURT, SFX_CHANNEL_2);
     }
 
-
 }
+
+void do_layer_anim(unsigned char toLayer) {
+    sfx_play(SFX_EVERT, SFX_CHANNEL_1);
+    fade_out();
+    currentLayer = toLayer;
+    // Force a sprite refresh to avoid a flash of the old state
+    update_map_sprites();
+    // TODO: some shit
+
+    ppu_off();
+
+    pal_bg(&(layerBasedPalettes[0]) + (currentLayer << 4));
+    music_play_continue(SONG_LAYERS + currentLayer);
+
+    ppu_on_all();
+
+    set_chr_bank_0(CHR_BANK_TILES + currentLayer);
+    fade_in();
+}
+
 
 void handle_player_movement(void) {
     // Using a variable, so we can change the velocity based on pressing a button, having a special item,
@@ -210,6 +229,27 @@ void handle_player_movement(void) {
         gameState = GAME_STATE_PAUSED;
         return;
     }
+
+    // Debug stuff
+    #if DEBUG == 1
+        if (controllerState & PAD_SELECT) {
+            if (controllerState & PAD_UP && !(lastControllerState & PAD_UP)) {
+                ++playerKeyCount;
+            }
+            if (controllerState & PAD_DOWN && !(lastControllerState & PAD_DOWN)) {
+                --playerKeyCount;
+            }
+            if (controllerState & PAD_LEFT && !(lastControllerState & PAD_LEFT)) {
+                do_layer_anim(currentLayer - 1);
+
+            }
+            if (controllerState & PAD_RIGHT && !(lastControllerState & PAD_RIGHT)) {
+                do_layer_anim(currentLayer + 1);
+            }
+
+        }
+    #endif
+
     if (playerControlsLockTime) {
         // If your controls are locked, just tick down the timer until they stop being locked. Don't read player input.
         playerControlsLockTime--;
@@ -555,25 +595,6 @@ void test_player_tile_collision(void) {
     playerXPosition += playerXVelocity + playerGravityPullX;
     playerYPosition += playerYVelocity + playerGravityPullY;
 
-}
-
-void do_layer_anim(unsigned char toLayer) {
-    sfx_play(SFX_EVERT, SFX_CHANNEL_1);
-    fade_out();
-    currentLayer = toLayer;
-    // Force a sprite refresh to avoid a flash of the old state
-    update_map_sprites();
-    // TODO: some shit
-
-    ppu_off();
-
-    pal_bg(&(layerBasedPalettes[0]) + (currentLayer << 4));
-    music_play_continue(SONG_LAYERS + currentLayer);
-
-    ppu_on_all();
-
-    set_chr_bank_0(CHR_BANK_TILES + currentLayer);
-    fade_in();
 }
 
 void handle_player_sprite_collision(void) {
