@@ -16,7 +16,7 @@ void draw_hud(void) {
     vram_put(HUD_TILE_BORDER_BR);
 
     vram_adr(NAMETABLE_A + HUD_ATTRS_START);
-    for (i = 0; i != 1; ++i) {
+    for (i = 0; i != 16; ++i) {
         vram_put(0xff);
     }
 }
