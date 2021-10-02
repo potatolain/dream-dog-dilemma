@@ -65,6 +65,8 @@
 #define SFX_GAMEOVER 3
 #define SFX_WIN 4
 
+#define SFX_DOOR 3
+
 // NEW STUFF NOT MADE YET
 #define SFX_EVERT 4
 
