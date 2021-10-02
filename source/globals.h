@@ -19,6 +19,8 @@ ZEROPAGE_EXTERN(unsigned char, currentLayer);
 ZEROPAGE_EXTERN(int, playerGravityPullX);
 ZEROPAGE_EXTERN(int, playerGravityPullY);
 ZEROPAGE_EXTERN(unsigned char, nearestHole);
+ZEROPAGE_EXTERN(unsigned char, nearestCrack);
+ZEROPAGE_EXTERN(unsigned char, crackTimer);
 
 ZEROPAGE_EXTERN(unsigned char, lastCheckpointScreenId);
 ZEROPAGE_EXTERN(unsigned char, lastCheckpointKeyCount);

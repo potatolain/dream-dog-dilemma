@@ -145,7 +145,7 @@ void update_player_sprite(void) {
         rawXPosition = 0;
     }
     
-    if (playerInvulnerabilityTime && frameCount & PLAYER_INVULNERABILITY_BLINK_MASK) {
+    if (gameState == GAME_STATE_GAME_OVER || (playerInvulnerabilityTime && frameCount & PLAYER_INVULNERABILITY_BLINK_MASK)) {
         // If the player is invulnerable, we hide their sprite about half the time to do a flicker animation.
         oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, rawTileId, 0x00, PLAYER_SPRITE_INDEX);
         oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, rawTileId + 1, 0x00, PLAYER_SPRITE_INDEX+4);
@@ -158,6 +158,43 @@ void update_player_sprite(void) {
         oam_spr(rawXPosition, rawYPosition + NES_SPRITE_HEIGHT, rawTileId + 16, 0x00, PLAYER_SPRITE_INDEX+8);
         oam_spr(rawXPosition + NES_SPRITE_WIDTH, rawYPosition + NES_SPRITE_HEIGHT, rawTileId + 17, 0x00, PLAYER_SPRITE_INDEX+12);
     }
+
+}
+
+void damage_player(unsigned char dmg, unsigned char doBounceAndSfx) {
+    playerHealth -= dmg; 
+    // Since playerHealth is unsigned, we need to check for wraparound damage. 
+    // NOTE: If something manages to do more than 16 damage at once, this might fail.
+    if (playerHealth == 0 || playerHealth > 240) {
+        gameState = GAME_STATE_GAME_OVER;
+        music_stop();
+        sfx_play(SFX_GAMEOVER, SFX_CHANNEL_1);
+        return;
+    }
+
+    // Knock the player back
+    playerControlsLockTime = PLAYER_DAMAGE_CONTROL_LOCK_TIME;
+    playerInvulnerabilityTime = PLAYER_DAMAGE_INVULNERABILITY_TIME;
+
+    if (doBounceAndSfx) {
+        if (playerDirection == SPRITE_DIRECTION_LEFT) {
+            // Punt them back in the opposite direction
+            playerXVelocity = PLAYER_MAX_VELOCITY;
+            // Reverse their velocity in the other direction, too.
+            playerYVelocity = 0 - playerYVelocity;
+        } else if (playerDirection == SPRITE_DIRECTION_RIGHT) {
+            playerXVelocity = 0-PLAYER_MAX_VELOCITY;
+            playerYVelocity = 0 - playerYVelocity;
+        } else if (playerDirection == SPRITE_DIRECTION_DOWN) {
+            playerYVelocity = 0-PLAYER_MAX_VELOCITY;
+            playerXVelocity = 0 - playerXVelocity;
+        } else { // Make being thrown downward into a catch-all, in case your direction isn't set or something.
+            playerYVelocity = PLAYER_MAX_VELOCITY;
+            playerXVelocity = 0 - playerXVelocity;
+        }
+        sfx_play(SFX_HURT, SFX_CHANNEL_2);
+    }
+
 
 }
 
@@ -251,6 +288,10 @@ void handle_player_movement(void) {
     // This will knock out the player's speed if they hit anything.
     test_player_tile_collision();
     handle_player_sprite_collision();
+
+    if (gameState == GAME_STATE_GAME_OVER) {
+        return;
+    }
 
     rawXPosition = (playerXPosition >> PLAYER_POSITION_SHIFT);
     rawYPosition = (playerYPosition >> PLAYER_POSITION_SHIFT);
@@ -393,6 +434,10 @@ void test_player_tile_collision(void) {
         }
 	}
 
+    if (nearestCrack != 0xff) {
+
+    }
+
     // Set gravity for next frame
     if (nearestHole != 0xff) {
         if (((nearestHole & 0x0f) << 4) > collisionTempX) { 
@@ -419,12 +464,91 @@ void test_player_tile_collision(void) {
         
         // hole
         if (collisionTileTemp == 3) {
-            // FIXME: Do something smarter, health, etc
-            gameState = GAME_STATE_GAME_OVER;
+            
+            // Forcibly animating fall animation using oam
+            sfx_play(SFX_FALLING, SFX_CHANNEL_1);
 
+            collisionTileTemp = (nearestHole & 0xf0) + HUD_PIXEL_HEIGHT;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 0) = collisionTileTemp;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 0 + 4) = collisionTileTemp;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 0 + 8) = collisionTileTemp+8;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 0 + 12) = collisionTileTemp+8;
+            collisionTileTemp = (nearestHole & 0x0f) << 4;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 3) = collisionTileTemp;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 3 + 4) = collisionTileTemp+8;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 3 + 8) = collisionTileTemp;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 3 + 12) = collisionTileTemp+8;
+
+
+            delay(4);
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 1) = 0x48;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 1 + 4) = 0x49;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 1 + 8) = 0x58;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 1 + 12) = 0x59;
+            delay(10);
+
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 1) = 0x4a;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 1 + 4) = 0x4b;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 1 + 8) = 0x5a;
+            *(unsigned char*)(0x200 + PLAYER_SPRITE_INDEX + 1 + 12) = 0x5b;
+            delay(10);
+
+
+            if (!playerInvulnerabilityTime) {
+                damage_player(1, 0);
+                if (gameState == GAME_STATE_GAME_OVER) {
+                    playerXPosition = 999999;
+                    playerYPosition = 999999;
+                    return;
+                }
+            }
+            // Boing
+            playerXVelocity = 0 - playerXVelocity;
+            playerYVelocity = 0 - playerYVelocity;
+            playerGravityPullX = 0;
+            playerGravityPullY = 0;
+
+            // FIXME: This too
+            
+        } else if (collisionTileTemp == 4 && nearestCrack == 0xff) { // Crack
+            nearestCrack = PLAYER_MAP_POSITION(collisionTempX, collisionTempY);
+            crackTimer = 60;
         }
     }
 
+    // For lack of a better home
+    if (crackTimer > 0) {
+        --crackTimer;
+
+        if (crackTimer == 0) {
+            // Preserve palette, set hole
+            currentMap[nearestCrack] = (currentMap[nearestCrack] & 0xc0) + 11;
+            // Steal 1 frame to animate right here, right now
+            collisionTileTemp = currentMap[nearestCrack] & 0x3f;
+            collisionTileTemp = (((collisionTileTemp & 0xf8)) << 2) + ((collisionTileTemp & 0x07) << 1);
+            screenBuffer[0] =  MSB(NTADR_A(((nearestCrack & 0x0f)<<1), ((nearestCrack & 0xf0) >>3)-0)) | NT_UPD_HORZ;
+            screenBuffer[1] =  LSB(NTADR_A(((nearestCrack & 0x0f)<<1), ((nearestCrack & 0xf0) >>3)-0));
+            screenBuffer[2] = 2;
+            screenBuffer[3] = collisionTileTemp;
+            screenBuffer[4] = collisionTileTemp+1;
+            
+            screenBuffer[5] =  MSB(NTADR_A((nearestCrack & 0x0f)<<1, ((nearestCrack & 0xf0) >>3)+1)) | NT_UPD_HORZ;
+            screenBuffer[6] =  LSB(NTADR_A((nearestCrack & 0x0f)<<1, ((nearestCrack & 0xf0) >>3)+1));
+            screenBuffer[7] = 2;
+            screenBuffer[8] = collisionTileTemp + 16;
+            screenBuffer[9] = collisionTileTemp + 17;
+            screenBuffer[10] = NT_UPD_EOF;
+
+            sfx_play(SFX_HOLE_FORM, SFX_CHANNEL_2);
+            set_vram_update(screenBuffer);
+            ppu_wait_nmi();
+            set_vram_update(NULL);
+
+
+
+            nearestCrack = 0xff;
+        }
+    }
 
 
     playerXPosition += playerXVelocity + playerGravityPullX;
@@ -490,35 +614,7 @@ void handle_player_sprite_collision(void) {
                 if (playerInvulnerabilityTime) {
                     return;
                 }
-                playerHealth -= currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE]; 
-                // Since playerHealth is unsigned, we need to check for wraparound damage. 
-                // NOTE: If something manages to do more than 16 damage at once, this might fail.
-                if (playerHealth == 0 || playerHealth > 240) {
-                    gameState = GAME_STATE_GAME_OVER;
-                    music_stop();
-                    sfx_play(SFX_GAMEOVER, SFX_CHANNEL_1);
-                    return;
-                }
-                // Knock the player back
-                playerControlsLockTime = PLAYER_DAMAGE_CONTROL_LOCK_TIME;
-                playerInvulnerabilityTime = PLAYER_DAMAGE_INVULNERABILITY_TIME;
-                if (playerDirection == SPRITE_DIRECTION_LEFT) {
-                    // Punt them back in the opposite direction
-                    playerXVelocity = PLAYER_MAX_VELOCITY;
-                    // Reverse their velocity in the other direction, too.
-                    playerYVelocity = 0 - playerYVelocity;
-                } else if (playerDirection == SPRITE_DIRECTION_RIGHT) {
-                    playerXVelocity = 0-PLAYER_MAX_VELOCITY;
-                    playerYVelocity = 0 - playerYVelocity;
-                } else if (playerDirection == SPRITE_DIRECTION_DOWN) {
-                    playerYVelocity = 0-PLAYER_MAX_VELOCITY;
-                    playerXVelocity = 0 - playerXVelocity;
-                } else { // Make being thrown downward into a catch-all, in case your direction isn't set or something.
-                    playerYVelocity = PLAYER_MAX_VELOCITY;
-                    playerXVelocity = 0 - playerXVelocity;
-                }
-                sfx_play(SFX_HURT, SFX_CHANNEL_2);
-
+                damage_player(currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE], 1); 
                 
                 break;
             case SPRITE_TYPE_DOOR: 

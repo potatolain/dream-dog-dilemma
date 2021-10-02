@@ -66,5 +66,13 @@ unsigned char test_collision(unsigned char tilePos, unsigned char isPlayer) {
             return 0;
         }
     }
+
+    if (collisionTemp == 4) {
+        if (isPlayer) {
+            return 0;
+        }
+    }
+
+
     return collisionTemp;
 }

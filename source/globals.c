@@ -25,6 +25,8 @@ ZEROPAGE_DEF(unsigned char, lastControllerState);
 ZEROPAGE_DEF(int, playerGravityPullX);
 ZEROPAGE_DEF(int, playerGravityPullY);
 ZEROPAGE_DEF(unsigned char, nearestHole);
+ZEROPAGE_DEF(unsigned char, nearestCrack);
+ZEROPAGE_DEF(unsigned char, crackTimer);
 
 ZEROPAGE_DEF(unsigned char, lastCheckpointScreenId);
 ZEROPAGE_DEF(unsigned char, lastCheckpointLayer);

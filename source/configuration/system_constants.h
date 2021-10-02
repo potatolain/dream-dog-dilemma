@@ -66,6 +66,8 @@
 #define SFX_WIN 4
 
 #define SFX_DOOR 3
+#define SFX_HOLE_FORM 0
+#define SFX_FALLING 3
 
 // NEW STUFF NOT MADE YET
 #define SFX_EVERT 4

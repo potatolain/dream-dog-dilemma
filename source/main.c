@@ -46,6 +46,7 @@ void initialize_variables(void) {
     lastCheckpointKeyCount = playerKeyCount;
     lastCheckpointPlayerX = playerXPosition;
     lastCheckpointPlayerY = playerYPosition;
+    nearestCrack = 0xff;
 
     for (i = 0; i < 64; ++i) {
         lastCheckpointWorldState[i] = 0;
@@ -116,6 +117,7 @@ void main(void) {
 
                 // If you don't like the screen scrolling transition, you can replace the transition with `do_fade_screen_transition`
                 banked_call(PRG_BANK_MAP_LOGIC, do_scroll_screen_transition);
+                nearestCrack = 0xff;
                 break;
             case GAME_STATE_SHOWING_TEXT:
                 banked_call(PRG_BANK_GAME_TEXT, draw_game_text);
