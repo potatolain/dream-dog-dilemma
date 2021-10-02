@@ -25,6 +25,8 @@ ZEROPAGE_DEF(unsigned char, playerControlsLockTime);
 ZEROPAGE_DEF(unsigned char, playerInvulnerabilityTime);
 ZEROPAGE_DEF(unsigned char, playerDirection);
 
+ZEROPAGE_DEF(unsigned char, doorPosition)
+
 // Huge pile of temporary variables
 #define rawXPosition tempChar1
 #define rawYPosition tempChar2
@@ -323,7 +325,7 @@ void test_player_tile_collision(void) {
 
 		if (playerYVelocity < 0) {
             // We're going up - test the top left, and top right
-			if (test_collision(currentMap[PLAYER_MAP_POSITION(collisionTempX, collisionTempY)], 1) || test_collision(currentMap[PLAYER_MAP_POSITION(collisionTempXRight, collisionTempY)], 1)) {
+			if (test_collision(PLAYER_MAP_POSITION(collisionTempX, collisionTempY), 1) || test_collision(PLAYER_MAP_POSITION(collisionTempXRight, collisionTempY), 1)) {
                 playerYVelocity = 0;
                 playerControlsLockTime = 0;
             }
@@ -332,7 +334,7 @@ void test_player_tile_collision(void) {
             }
 		} else {
             // Okay, we're going down - test the bottom left and bottom right
-			if (test_collision(currentMap[PLAYER_MAP_POSITION(collisionTempX, collisionTempYBottom)], 1) || test_collision(currentMap[PLAYER_MAP_POSITION(collisionTempXRight, collisionTempYBottom)], 1)) {
+			if (test_collision(PLAYER_MAP_POSITION(collisionTempX, collisionTempYBottom), 1) || test_collision(PLAYER_MAP_POSITION(collisionTempXRight, collisionTempYBottom), 1)) {
                 playerYVelocity = 0;
                 playerControlsLockTime = 0;
 
@@ -366,7 +368,7 @@ void test_player_tile_collision(void) {
         if (collisionTempX > 2 && collisionTempX < 238) {
             if (playerXVelocity < 0) {
                 // Okay, we're moving left. Need to test the top-left and bottom-left
-                if (test_collision(currentMap[PLAYER_MAP_POSITION(collisionTempX, collisionTempY)], 1) || test_collision(currentMap[PLAYER_MAP_POSITION(collisionTempX, collisionTempYBottom)], 1)) {
+                if (test_collision(PLAYER_MAP_POSITION(collisionTempX, collisionTempY), 1) || test_collision(PLAYER_MAP_POSITION(collisionTempX, collisionTempYBottom), 1)) {
                     playerXVelocity = 0;
                     playerControlsLockTime = 0;
 
@@ -376,7 +378,7 @@ void test_player_tile_collision(void) {
                 }
             } else {
                 // Going right - need to test top-right and bottom-right
-                if (test_collision(currentMap[PLAYER_MAP_POSITION(collisionTempXRight, collisionTempY)], 1) || test_collision(currentMap[PLAYER_MAP_POSITION(collisionTempXRight, collisionTempYBottom)], 1)) {
+                if (test_collision(PLAYER_MAP_POSITION(collisionTempXRight, collisionTempY), 1) || test_collision(PLAYER_MAP_POSITION(collisionTempXRight, collisionTempYBottom), 1)) {
                     playerXVelocity = 0;
                     playerControlsLockTime = 0;
 
@@ -499,12 +501,16 @@ void handle_player_sprite_collision(void) {
                     currentMapSpritePersistance[playerOverworldPosition] |= bitToByte[lastPlayerSpriteCollisionId];
 
                     sfx_play(SFX_DOOR, SFX_CHANNEL_3);
+                    doorPosition = 0xff;
 
                     break;
                 }
                 // So you don't have a key...
                 // Okay, we collided with a door before we calculated the player's movement. After being moved, does the 
                 // new player position also collide? If so, stop it. Else, let it go.
+                
+                // This has MAJOR collision bugs! Instead, we store it and collide it using the tile collision method
+                /*
 
                 // Calculate position...
                 tempSpriteCollisionX = ((currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_X]) + ((currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_X + 1]) << 8));
@@ -522,6 +528,7 @@ void handle_player_sprite_collision(void) {
                     playerYPosition -= playerYVelocity;
                     playerControlsLockTime = 0;
                 }
+                */
                 break;
             case SPRITE_TYPE_ENDGAME:
                 gameState = GAME_STATE_CREDITS;

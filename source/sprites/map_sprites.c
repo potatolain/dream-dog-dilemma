@@ -152,7 +152,7 @@ void update_map_sprites(void) {
                     }
                     // Add speed in
                     sprX += (signed char)currentSpriteData;
-                    if (test_collision(currentMap[SPRITE_MAP_POSITION(sprX, sprY + SPRITE_TILE_HITBOX_OFFSET)], 0) || test_collision(currentMap[SPRITE_MAP_POSITION(sprX, sprY + currentSpriteFullTileCollisionHeight)], 0)) {
+                    if (test_collision(SPRITE_MAP_POSITION(sprX, sprY + SPRITE_TILE_HITBOX_OFFSET), 0) || test_collision(SPRITE_MAP_POSITION(sprX, sprY + currentSpriteFullTileCollisionHeight), 0)) {
                         // Never mind... leave X position alone for now
                         sprX -= (signed char)currentSpriteData;
                         // Roll back our change to pick right of the sprite
@@ -185,7 +185,7 @@ void update_map_sprites(void) {
                     }
                     // Add speed in
                     sprY += (signed char)currentSpriteData;
-                    if (test_collision(currentMap[SPRITE_MAP_POSITION(sprX + SPRITE_TILE_HITBOX_OFFSET, sprY)], 0) || test_collision(currentMap[SPRITE_MAP_POSITION(sprX + currentSpriteFullTileCollisionWidth, sprY)], 0)) {
+                    if (test_collision(SPRITE_MAP_POSITION(sprX + SPRITE_TILE_HITBOX_OFFSET, sprY), 0) || test_collision(SPRITE_MAP_POSITION(sprX + currentSpriteFullTileCollisionWidth, sprY), 0)) {
                         // Never mind... leave X position alone for now
                         sprY -= (signed char)currentSpriteData;
                         // Roll back our change to pick right of the sprite
@@ -304,6 +304,11 @@ void update_map_sprites(void) {
             if (currentSpriteType == SPRITE_TYPE_REGULAR_ENEMY || currentSpriteType == SPRITE_TYPE_INVULNERABLE_ENEMY) {
                 sprX -= SPRITE_HITBOX_OFFSET;
                 sprY -= SPRITE_HITBOX_OFFSET;
+            } else if (currentSpriteType == SPRITE_TYPE_LOCKED_DOOR) {
+                sprX -= SPRITE_HITBOX_OFFSET;
+                sprY -= SPRITE_HITBOX_OFFSET;
+                currentSpriteFullWidth += SPRITE_HITBOX_OFFSET*2;
+                // currentSpriteFullHeight is same as above, don't reincrement
             }
 
             // Collision test... see here for a clear explanation: https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
@@ -338,7 +343,7 @@ void do_sprite_movement_with_collision(void) {
             }
 
             // If we have not collided, save the new position. Else, just exit.
-            if (!test_collision(currentMap[SPRITE_MAP_POSITION(sprX, sprY + SPRITE_TILE_HITBOX_OFFSET)], 0) && !test_collision(currentMap[SPRITE_MAP_POSITION(sprX, sprY + currentSpriteFullTileCollisionHeight)], 0)) {
+            if (!test_collision(SPRITE_MAP_POSITION(sprX, sprY + SPRITE_TILE_HITBOX_OFFSET), 0) && !test_collision(SPRITE_MAP_POSITION(sprX, sprY + currentSpriteFullTileCollisionHeight), 0)) {
                 currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_X] = (sprX & 0xff);
                 currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_X+1] = (sprX >> 8);
             } else {
@@ -357,7 +362,7 @@ void do_sprite_movement_with_collision(void) {
             }
 
             // If we have not collided, save the new position. Else, just exit.
-            if (!test_collision(currentMap[SPRITE_MAP_POSITION(sprX, sprY + SPRITE_TILE_HITBOX_OFFSET)], 0) && !test_collision(currentMap[SPRITE_MAP_POSITION(sprX, sprY + currentSpriteFullTileCollisionHeight)], 0)) {
+            if (!test_collision(SPRITE_MAP_POSITION(sprX, sprY + SPRITE_TILE_HITBOX_OFFSET), 0) && !test_collision(SPRITE_MAP_POSITION(sprX, sprY + currentSpriteFullTileCollisionHeight), 0)) {
                 // If we did collide, we added the full width of the sprite to sprX; take that back out.
                 sprX -= currentSpriteFullTileCollisionWidth;
 
@@ -377,7 +382,7 @@ void do_sprite_movement_with_collision(void) {
             }
 
             // If we have not collided, save the new position. Else, just exit.
-            if (!test_collision(currentMap[SPRITE_MAP_POSITION(sprX + SPRITE_TILE_HITBOX_OFFSET, sprY)], 0) && !test_collision(currentMap[SPRITE_MAP_POSITION(sprX + currentSpriteFullTileCollisionWidth, sprY)], 0)) {
+            if (!test_collision(SPRITE_MAP_POSITION(sprX + SPRITE_TILE_HITBOX_OFFSET, sprY), 0) && !test_collision(SPRITE_MAP_POSITION(sprX + currentSpriteFullTileCollisionWidth, sprY), 0)) {
                 currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_Y] = (sprY & 0xff);
                 currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_Y+1] = (sprY >> 8);
             } else {
@@ -397,7 +402,7 @@ void do_sprite_movement_with_collision(void) {
             }
 
             // If we have not collided, save the new position. Else, just exit.
-            if (!test_collision(currentMap[SPRITE_MAP_POSITION(sprX + SPRITE_TILE_HITBOX_OFFSET, sprY)], 0) && !test_collision(currentMap[SPRITE_MAP_POSITION(sprX + currentSpriteFullTileCollisionWidth, sprY)], 0)) {
+            if (!test_collision(SPRITE_MAP_POSITION(sprX + SPRITE_TILE_HITBOX_OFFSET, sprY), 0) && !test_collision(SPRITE_MAP_POSITION(sprX + currentSpriteFullTileCollisionWidth, sprY), 0)) {
                 // Reset sprY to the top of the sprite before we update.
                 sprY -= currentSpriteFullTileCollisionHeight;
 

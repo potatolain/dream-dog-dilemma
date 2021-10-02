@@ -1,6 +1,9 @@
 #include "source/sprites/collision.h"
 #include "source/library/bank_helpers.h"
 #include "source/globals.h"
+#include "source/sprites/player.h"
+#include "source/menus/error.h"
+#include "source/map/map.h"
 
 CODE_BANK(PRG_BANK_SPRITE_COLLISION);
 ZEROPAGE_DEF(unsigned char, collisionTemp);
@@ -41,9 +44,13 @@ const unsigned char tileCollisions[] = {
 };
 
 
-unsigned char test_collision(unsigned char tileId, unsigned char isPlayer) {
+unsigned char test_collision(unsigned char tilePos, unsigned char isPlayer) {
     // The top 2 bits of the tile id are the palette color. We don't care about that here, so skip them.
-    collisionTemp = tileId & 0x3f;
+    collisionTemp = currentMap[tilePos] & 0x3f;
+
+    if (tilePos == doorPosition) {
+        return 1;
+    }
 
     // Jump up to pos in tileCollisios above
     collisionTemp += (currentLayer << 5);
