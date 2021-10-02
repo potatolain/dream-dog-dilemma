@@ -16,6 +16,10 @@ ZEROPAGE_EXTERN(unsigned char, playerMaxHealth);
 ZEROPAGE_EXTERN(unsigned char, currentWorldId);
 ZEROPAGE_EXTERN(unsigned char, currentLayer);
 
+ZEROPAGE_EXTERN(int, playerGravityPullX);
+ZEROPAGE_EXTERN(int, playerGravityPullY);
+ZEROPAGE_EXTERN(unsigned char, nearestHole);
+
 ZEROPAGE_EXTERN(unsigned char, lastCheckpointScreenId);
 ZEROPAGE_EXTERN(unsigned char, lastCheckpointKeyCount);
 ZEROPAGE_EXTERN(unsigned char, lastCheckpointLayer);

@@ -296,11 +296,13 @@ void handle_player_movement(void) {
 
 }
 
+ZEROPAGE_DEF(unsigned char, collisionTileTemp);
 void test_player_tile_collision(void) {
 
+    nearestHole = 0xff;
 	if (playerYVelocity != 0) {
-        collisionTempYInt = playerYPosition + PLAYER_Y_OFFSET_EXTENDED + playerYVelocity;
-        collisionTempXInt = playerXPosition + PLAYER_X_OFFSET_EXTENDED;
+        collisionTempYInt = playerYPosition + PLAYER_Y_OFFSET_EXTENDED + playerYVelocity + playerGravityPullX;
+        collisionTempXInt = playerXPosition + PLAYER_X_OFFSET_EXTENDED + playerGravityPullY;
 
 		collisionTempY = ((collisionTempYInt) >> PLAYER_POSITION_SHIFT) - HUD_PIXEL_HEIGHT;
 		collisionTempX = ((collisionTempXInt) >> PLAYER_POSITION_SHIFT);
@@ -347,8 +349,8 @@ void test_player_tile_collision(void) {
     }
 
 	if (playerXVelocity != 0) {
-        collisionTempXInt = playerXPosition + PLAYER_X_OFFSET_EXTENDED + playerXVelocity;
-        collisionTempYInt = playerYPosition + PLAYER_Y_OFFSET_EXTENDED + playerYVelocity;
+        collisionTempXInt = playerXPosition + PLAYER_X_OFFSET_EXTENDED + playerXVelocity + playerGravityPullX;
+        collisionTempYInt = playerYPosition + PLAYER_Y_OFFSET_EXTENDED + playerYVelocity + playerGravityPullY;
 		collisionTempX = (collisionTempXInt) >> PLAYER_POSITION_SHIFT;
 		collisionTempY = ((collisionTempYInt) >> PLAYER_POSITION_SHIFT) - HUD_PIXEL_HEIGHT;
 
@@ -391,8 +393,42 @@ void test_player_tile_collision(void) {
         }
 	}
 
-    playerXPosition += playerXVelocity;
-    playerYPosition += playerYVelocity;
+    // Set gravity for next frame
+    if (nearestHole != 0xff) {
+        if (((nearestHole & 0x0f) << 4) > collisionTempX) { 
+            //crash_error("xNudgePlus", "x", "x", 54);
+            playerGravityPullX = 12;
+        } else {
+            playerGravityPullX = -12;
+        }
+
+        if (((nearestHole & 0xf0)) > collisionTempY) {
+            playerGravityPullY = 12;
+        } else {
+            playerGravityPullY = -12;
+        }
+    } else {
+        playerGravityPullX = 0;
+        playerGravityPullY = 0;
+    }
+
+    // Test single-tile pull-based effects
+    if (PLAYER_MAP_POSITION(collisionTempX, collisionTempY) == PLAYER_MAP_POSITION(collisionTempX + 8, collisionTempY + 6)) {
+        // NOTE: Setting isPlayer to _false_ here to get collision values sprites see, for when we can walk over things like holes
+        collisionTileTemp = test_collision(PLAYER_MAP_POSITION(collisionTempX, collisionTempY), 0);
+        
+        // hole
+        if (collisionTileTemp == 3) {
+            // FIXME: Do something smarter, health, etc
+            gameState = GAME_STATE_GAME_OVER;
+
+        }
+    }
+
+
+
+    playerXPosition += playerXVelocity + playerGravityPullX;
+    playerYPosition += playerYVelocity + playerGravityPullY;
 
 }
 

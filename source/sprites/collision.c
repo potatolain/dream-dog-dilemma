@@ -4,6 +4,7 @@
 #include "source/sprites/player.h"
 #include "source/menus/error.h"
 #include "source/map/map.h"
+#include "source/configuration/game_states.h"
 
 CODE_BANK(PRG_BANK_SPRITE_COLLISION);
 ZEROPAGE_DEF(unsigned char, collisionTemp);
@@ -55,5 +56,15 @@ unsigned char test_collision(unsigned char tilePos, unsigned char isPlayer) {
     // Jump up to pos in tileCollisios above
     collisionTemp += (currentLayer << 5);
 
-    return tileCollisions[collisionTemp];
+    collisionTemp = tileCollisions[collisionTemp];
+
+    if (collisionTemp == 3) {
+        if (isPlayer) {
+            if (nearestHole == 0xff) {
+                nearestHole = tilePos;
+            }
+            return 0;
+        }
+    }
+    return collisionTemp;
 }
