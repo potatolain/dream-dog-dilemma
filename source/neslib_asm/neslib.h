@@ -115,6 +115,8 @@ void __fastcall__ oam_hide_rest(unsigned char sprid);
 
 void __fastcall__ music_play(unsigned char song);
 
+void __fastcall__ music_play_continue(unsigned char song);
+
 //stop music
 
 void __fastcall__ music_stop(void);

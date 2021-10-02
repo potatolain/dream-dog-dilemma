@@ -64,7 +64,7 @@ void draw_game_text(void) {
     set_nmi_chr_tile_bank(CHR_BANK_MENU);
     ppu_wait_nmi();
     wait_for_sprite0_hit();
-    set_chr_bank_0(CHR_BANK_TILES);
+    set_chr_bank_0(CHR_BANK_TILES + currentLayer);
     // Drawing done; make sure we don't try to keep drawing it to save some time.
     set_vram_update(NULL);
 
@@ -96,7 +96,7 @@ void draw_game_text(void) {
             // Quick break for nmi to make sure we don't have glitches
             ppu_wait_nmi();
             wait_for_sprite0_hit();
-            set_chr_bank_0(CHR_BANK_TILES);
+            set_chr_bank_0(CHR_BANK_TILES + currentLayer);
 
             // Draw 3 lines of text.
             for (; bufferIndex != 98; ++bufferIndex) {
@@ -106,7 +106,7 @@ void draw_game_text(void) {
                     // Take a short break to make sure we don't have a glitch because of showing the wrong chr bank.
                     ppu_wait_nmi();
                     wait_for_sprite0_hit();
-                    set_chr_bank_0(CHR_BANK_TILES);
+                    set_chr_bank_0(CHR_BANK_TILES + currentLayer);
 
                 }
 
@@ -130,7 +130,7 @@ void draw_game_text(void) {
             set_vram_update(buffer);
             ppu_wait_nmi();
             wait_for_sprite0_hit();
-            set_chr_bank_0(CHR_BANK_TILES);
+            set_chr_bank_0(CHR_BANK_TILES + currentLayer);
             set_vram_update(NULL);
 
         }
@@ -148,7 +148,7 @@ void draw_game_text(void) {
         }
         ppu_wait_nmi();
         wait_for_sprite0_hit();
-        set_chr_bank_0(CHR_BANK_TILES);
+        set_chr_bank_0(CHR_BANK_TILES + currentLayer);
 
     }
 
@@ -167,6 +167,6 @@ void draw_game_text(void) {
     oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, HUD_SPRITE_ZERO_TILE_ID, 0x00, 0);
 
     // And finally put everything back how the game expects it.
-    set_chr_bank_0(CHR_BANK_TILES);
+    set_chr_bank_0(CHR_BANK_TILES + currentLayer);
     unset_nmi_chr_tile_bank();
 }

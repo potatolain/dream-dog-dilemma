@@ -34,12 +34,17 @@ CODE_BANK(PRG_BANK_MAP_SPRITES);
 ZEROPAGE_DEF(unsigned char, lastPlayerSpriteCollisionId);
 ZEROPAGE_DEF(unsigned char, currentMapSpriteIndex);
 
+// im lazy HaCK
+extern const unsigned char screenKeyCounts[];
+
 // Forward definition of this method; code is at the bottom of this file. Ignore this for now!
 void do_sprite_movement_with_collision(void);
 
 // Updates all available map sprites (with movement every other frame)
 void update_map_sprites(void) {
     lastPlayerSpriteCollisionId = NO_SPRITE_HIT;
+
+    oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, 0, 0, 4);
 
     // To save some cpu time, we only update sprites every other frame - even sprites on even frames, odd sprites on odd frames.
     for (i = 0; i < MAP_MAX_SPRITES; ++i) {
@@ -86,6 +91,10 @@ void update_map_sprites(void) {
                 // If it's not in this dimension, make the radio transparent (and useless)
                 currentSpriteTileId += 2;
             }
+        }
+
+        if (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_LOCKED_DOOR) {
+            oam_spr((sprX >> SPRITE_POSITION_SHIFT) + 3, (sprY >> SPRITE_POSITION_SHIFT) + 9, 0xf0 + screenKeyCounts[playerOverworldPosition], 1, 4);
         }
 
         switch (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_ANIMATION_TYPE]) {

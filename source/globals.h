@@ -57,3 +57,5 @@ extern const unsigned int bitToByte[8];
 
 // Set a memory address to a value. Very, very raw.
 #define SET_ADDR_VALUE(addr, value) *(unsigned char*)(addr) = value
+
+#define DEBUG 1

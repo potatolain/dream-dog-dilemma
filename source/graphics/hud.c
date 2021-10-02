@@ -45,8 +45,17 @@ void update_hud(void) {
     }
 
     // Next, draw the key count, using the key tile, and our key count variable
+    // Next, draw the key count, using the key tile, and our key count variable
     screenBuffer[i++] = MSB(NAMETABLE_A + HUD_KEY_START) | NT_UPD_HORZ;
     screenBuffer[i++] = LSB(NAMETABLE_A + HUD_KEY_START);
+    screenBuffer[i++] = 3;
+    screenBuffer[i++] = HUD_TILE_KEY;
+    screenBuffer[i++] = HUD_TILE_NUMBER;
+    screenBuffer[i++] = HUD_TILE_NUMBER + playerKeyCount;
+
+
+    screenBuffer[i++] = MSB(NAMETABLE_A + 0x370) | NT_UPD_HORZ;
+    screenBuffer[i++] = LSB(NAMETABLE_A + 0x370);
     screenBuffer[i++] = 2;
     screenBuffer[i++] = 0xeb;
     screenBuffer[i++] = HUD_TILE_NUMBER + currentLayer;

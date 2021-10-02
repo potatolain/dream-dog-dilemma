@@ -31,7 +31,10 @@
 	.export _memcpy,_memfill,_delay
 	.export nmi_update
 
+	.export _music_play_continue
+
 	.export _split_y,_reset,_wait_for_sprite0_hit
+
 
 ;NMI handler
 
@@ -1259,6 +1262,12 @@ _vram_write:
 
 
 
+_music_play_continue:
+	tax
+	lda var_Pattern_Pos
+	sta var_SkipTo
+	jmp music_play_start
+
 ;void __fastcall__ music_play(unsigned char song);
 
 _music_play:
@@ -1266,13 +1275,18 @@ _music_play:
 	; @cppchriscpp Edit - forcing a swap to the music bank
 	; Need to temporarily swap banks to pull this off. 
 	tax ; Put our song into x for a moment...
+
+	lda #0
+	sta var_SkipTo
+
+	music_play_start:
 	; Being extra careful and setting BP_BANK to ours in case an nmi fires while we're doing this.
 	lda BP_BANK
 	pha
 	lda #SOUND_BANK
 	sta BP_BANK
 	mmc1_register_write MMC1_PRG
-	txa ; bring back the song number!
+	txa ; bring back the song number
 
 
 	ldx #<music_data

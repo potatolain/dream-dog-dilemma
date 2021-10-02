@@ -6,6 +6,7 @@
 #include "source/menus/text_helpers.h"
 #include "source/graphics/palettes.h"
 #include "source/configuration/game_info.h"
+#include "source/map/map.h"
 
 CODE_BANK(PRG_BANK_TITLE);
 
@@ -29,7 +30,13 @@ void draw_title_screen(void) {
 	put_str(NTADR_A(17, 28), gameAuthor);
 
 	put_str(NTADR_A(10, 16), "Press Start!");
+
+	#if DEBUG == 1
+		put_str(NTADR_A(2, 27), "DEBUG MODE ENABLED");
+	#endif
+
 	ppu_on_all();
+
 
 	gameState = GAME_STATE_TITLE_INPUT;
 }
@@ -37,5 +44,11 @@ void draw_title_screen(void) {
 void handle_title_input(void) {
 	if (pad_trigger(0) & PAD_START) {
 		gameState = GAME_STATE_POST_TITLE;
+		#if DEBUG == 1
+			// DEBUG SCREEN
+			if (pad_poll(0) & PAD_SELECT) {
+				playerOverworldPosition = 7;
+			}
+		#endif
 	}
 }

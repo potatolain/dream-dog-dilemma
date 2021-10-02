@@ -40,17 +40,90 @@ ZEROPAGE_DEF(unsigned char, playerDirection);
 #define collisionTempXInt tempInt3
 #define collisionTempYInt tempInt4
 
- const unsigned char* introductionText = 
-                                "Welcome to nes-starter-kit! I " 
-                                "am an NPC.                    "
+const unsigned char* defaultText = 
+                                "Hello! Be careful out there;  "
+                                "this world is dangerous.      "
+                                "                              "
+                                "Good luck!";
+
+const unsigned char* corruptionText = 
+                                "Ht §¨r t£¤s¥¦©bª«c¬?    ";
+
+const unsigned char* corruptionText2 = 
+                                "Bt t§¨b m,¤s£n¥¦©«cbª¬!";
+
+const unsigned char* firstPageText = 
+                                "Hello! How did you get here?  " 
+                                "                              "
                                 "                              "
 
-                                "Hope you're having fun!       "
-                                "                              "
-                                "- Chris";
-const unsigned char* movedText = 
-                                "Hey, you put me on another    "
-                                "screen! Cool!";
+                                "Oh, I see. Well, I guess it   "
+                                "can't be helped. Here is a tip"
+                                "to help you.                  "
+
+                                "There are doors like these all"
+                                "over.The number of keys they  "
+                                "need hovers over them.        "
+
+                                "Good luck out there!";
+
+const unsigned char* secondPageText = 
+                                "This world is less stable than"
+                                "it looks! Whoever sent you    "
+                                "here must not like you...     "
+
+                                "They trapped me here on this  "
+                                "island! Those darn tiny bushes"
+                                "are in the way!               "
+                                
+                                "The radio nearby seems very   "
+                                "strange. Something might      "
+                                "happen if you press A near it."
+
+                                "What does \"press A\" mean? I   "
+                                "don't know! I was told to say "
+                                "this!";
+
+const unsigned char* secondPageOtherDimensionText = 
+                                "Hi there! I remember talking  "
+                                "to you a many years ago!I made"
+                                "this island home.             "
+
+                                "I guess this means you must   "
+                                "have never found your way     "
+                                "home. I'm sorry.";
+
+
+const unsigned char screenKeyCounts[] = {
+    1, 2, 2, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0
+};
+
+const unsigned char layerBasedPalettes[] = {
+    // green
+    0x0f, 0x01, 0x21, 0x31, 0x0f, 0x06, 0x16, 0x26, 0x0f, 0x21, 0x19, 0x29, 0x0f, 0x08, 0x18, 0x28,
+
+    // autumn
+    0x0f, 0x01, 0x2c, 0x3c, 0x0f, 0x05, 0x06, 0x26, 0x0f, 0x3c, 0x28, 0x38, 0x0f, 0x08, 0x18, 0x28,
+    
+    // desert
+    0x0f, 0x01, 0x22, 0x31, 0x0f, 0x07, 0x17, 0x27, 0x0f, 0x37, 0x28, 0x38, 0x0f, 0x08, 0x18, 0x28,
+
+    // unstable
+    0x0f, 0x11, 0x31, 0x30, 0x0f, 0x16, 0x26, 0x36, 0x0f, 0x20, 0x1b, 0x3b, 0x0f, 0x18, 0x38, 0x20,
+
+    // comp
+    0x0f, 0x0f, 0x31, 0x20, 0x0f, 0x0f, 0x20, 0x20, 0x0f, 0x20, 0x1a, 0x20, 0x0f, 0x18, 0x38, 0x20
+
+};
+
+
 
 // NOTE: This uses tempChar1 through tempChar3; the caller must not use these.
 void update_player_sprite(void) {
@@ -327,6 +400,15 @@ void do_layer_anim(unsigned char toLayer) {
     // Force a sprite refresh to avoid a flash of the old state
     update_map_sprites();
     // TODO: some shit
+
+    ppu_off();
+
+    pal_bg(&(layerBasedPalettes[0]) + (currentLayer << 4));
+    music_play_continue(SONG_LAYERS + currentLayer);
+
+    ppu_on_all();
+
+    set_chr_bank_0(CHR_BANK_TILES + currentLayer);
     fade_in();
 }
 
@@ -407,8 +489,8 @@ void handle_player_sprite_collision(void) {
                 break;
             case SPRITE_TYPE_LOCKED_DOOR:
                 // First off, do you have a key? If so, let's just make this go away...
-                if (playerKeyCount > 0) {
-                    playerKeyCount--;
+                if (playerKeyCount >= screenKeyCounts[playerOverworldPosition]) {
+                    playerKeyCount -= screenKeyCounts[playerOverworldPosition];
                     currentMapSpriteData[(currentMapSpriteIndex) + MAP_SPRITE_DATA_POS_TYPE] = SPRITE_TYPE_OFFSCREEN;
 
                     // Mark the door as gone, so it doesn't come back.
@@ -460,11 +542,26 @@ void handle_player_sprite_collision(void) {
 
                 if (controllerState & PAD_A && !(lastControllerState & PAD_A)) {
                     // Show the text for the player on the first screen
-                    if (playerOverworldPosition == 0) {
-                        trigger_game_text(introductionText);
-                    } else {
-                        // If it's on another screen, show some different text :)
-                        trigger_game_text(movedText);
+                    switch (playerOverworldPosition) {
+                        case 0:
+                            if (currentLayer == 0) {
+                                trigger_game_text(firstPageText);
+                            } else {
+                                trigger_game_text(corruptionText2);
+                            }
+                            break;
+                        case 8:
+                            if (currentLayer == 0) {
+                                trigger_game_text(secondPageText);
+                            } else if (currentLayer == 1) {
+                                trigger_game_text(secondPageOtherDimensionText);
+                            } else {
+                                trigger_game_text(corruptionText);
+                            }
+                            break;
+                        default:
+                            trigger_game_text(defaultText);
+                            break;
                     }
                 }
                 break;

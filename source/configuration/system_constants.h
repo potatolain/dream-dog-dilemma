@@ -13,7 +13,7 @@
 #define ROOM_HEIGHT_MAP_TILES 12
 
 #define CHR_BANK_MENU 0
-#define CHR_BANK_TILES 1
+#define CHR_BANK_TILES 4
 #define CHR_BANK_SPRITES 2
 
 #define HUD_TILE_SIZE 192
@@ -55,6 +55,8 @@
 // Constants for songs we play in the game
 #define SONG_TITLE 0
 #define SONG_OVERWORLD 1
+
+#define SONG_LAYERS 1
 
 // Constants for sound effects we play in the game
 #define SFX_HURT 0
