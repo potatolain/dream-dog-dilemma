@@ -29,18 +29,34 @@ unsigned char currentMapSpritePersistance[64];
 
 unsigned char mapScreenBuffer[0x55];
 
+// HACK: Lazy
+extern const unsigned char layerBasedPalettes[];
+
 void init_map(void) {
     // Make sure we're looking at the right sprite and chr data, not the ones for the menu.
     set_chr_bank_0(CHR_BANK_TILES + currentLayer);
     set_chr_bank_1(CHR_BANK_SPRITES);
 
     // Also set the palettes to the in-game palettes.
-    pal_bg(mainBgPalette);
+    pal_bg(&(layerBasedPalettes[0]) + (currentLayer << 4));
     pal_spr(mainSpritePalette);
 
     // Do some trickery to make the HUD show up at the top of the screen, with the map slightly below.
     scroll(0, 240-HUD_PIXEL_HEIGHT);
     set_mirroring(MIRROR_MODE_VERTICAL);
+}
+
+void restore_game_over(void) {
+    currentLayer = lastCheckpointLayer;
+    playerOverworldPosition = lastCheckpointScreenId;
+    playerKeyCount = lastCheckpointKeyCount;
+    for (i = 0; i < 64; ++i) {
+        currentMapSpritePersistance[i] = lastCheckpointWorldState[i];
+    }
+    playerHealth = playerMaxHealth;
+    
+    playerXPosition = lastCheckpointPlayerX;
+    playerYPosition = lastCheckpointPlayerY;
 }
 
 // Reusing a few temporary vars for the sprite function below.

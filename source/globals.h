@@ -16,6 +16,16 @@ ZEROPAGE_EXTERN(unsigned char, playerMaxHealth);
 ZEROPAGE_EXTERN(unsigned char, currentWorldId);
 ZEROPAGE_EXTERN(unsigned char, currentLayer);
 
+ZEROPAGE_EXTERN(unsigned char, lastCheckpointScreenId);
+ZEROPAGE_EXTERN(unsigned char, lastCheckpointKeyCount);
+ZEROPAGE_EXTERN(unsigned char, lastCheckpointLayer);
+ZEROPAGE_EXTERN(int, lastCheckpointPlayerX);
+ZEROPAGE_EXTERN(int, lastCheckpointPlayerY);
+
+ZEROPAGE_EXTERN(unsigned char, playerDeathCount);
+
+extern unsigned char lastCheckpointWorldState[64];
+
 ZEROPAGE_ARRAY_EXTERN(unsigned char, screenBuffer, 0x20);
 
 ZEROPAGE_EXTERN(unsigned char, controllerState);

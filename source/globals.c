@@ -22,6 +22,16 @@ ZEROPAGE_DEF(unsigned char, everyOtherCycle);
 ZEROPAGE_DEF(unsigned char, controllerState);
 ZEROPAGE_DEF(unsigned char, lastControllerState);
 
+ZEROPAGE_DEF(unsigned char, lastCheckpointScreenId);
+ZEROPAGE_DEF(unsigned char, lastCheckpointLayer);
+ZEROPAGE_DEF(unsigned char, lastCheckpointKeyCount);
+ZEROPAGE_DEF(int, lastCheckpointPlayerX);
+ZEROPAGE_DEF(int, lastCheckpointPlayerY);
+ZEROPAGE_DEF(unsigned char, playerDeathCount);
+
+unsigned char lastCheckpointWorldState[64];
+
+
 ZEROPAGE_DEF(unsigned char, tempChar1);
 ZEROPAGE_DEF(unsigned char, tempChar2);
 ZEROPAGE_DEF(unsigned char, tempChar3);

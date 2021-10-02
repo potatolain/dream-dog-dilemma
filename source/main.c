@@ -33,11 +33,24 @@ void initialize_variables(void) {
     playerXPosition = (128 << PLAYER_POSITION_SHIFT); // X position on the screen to start (increasing numbers as you go left to right. Just change the number)
     playerYPosition = (128 << PLAYER_POSITION_SHIFT); // Y position on the screen to start (increasing numbers as you go top to bottom. Just change the number)
     playerDirection = SPRITE_DIRECTION_DOWN; // What direction to have the player face to start.
+    playerKeyCount = 0;
 
     lastPlayerSpriteCollisionId = NO_SPRITE_HIT;
 
     currentWorldId = WORLD_OVERWORLD; // The ID of the world to load.
     currentLayer = 0;
+    playerDeathCount = 0;
+
+    lastCheckpointScreenId = playerOverworldPosition;
+    lastCheckpointLayer = currentLayer;
+    lastCheckpointKeyCount = playerKeyCount;
+    lastCheckpointPlayerX = playerXPosition;
+    lastCheckpointPlayerY = playerYPosition;
+
+    for (i = 0; i < 64; ++i) {
+        lastCheckpointWorldState[i] = 0;
+    }
+
     
     // Little bit of generic initialization below this point - we need to set
     // The system up to use a different hardware bank for sprites vs backgrounds.
@@ -71,11 +84,12 @@ void main(void) {
                 load_map();
 
                 banked_call(PRG_BANK_MAP_LOGIC, draw_current_map_to_a);
-                banked_call(PRG_BANK_MAP_LOGIC, init_map);
-                banked_call(PRG_BANK_MAP_LOGIC, load_sprites);
                 
                 // The draw map methods handle turning the ppu on/off, but we weren't quite done yet. Turn it back off.
                 ppu_off();
+                banked_call(PRG_BANK_MAP_LOGIC, init_map);
+                banked_call(PRG_BANK_MAP_LOGIC, load_sprites);
+
                 banked_call(PRG_BANK_HUD, draw_hud);
                 ppu_on_all();
 
@@ -117,10 +131,10 @@ void main(void) {
                 // Pause has its own mini main loop in handle_input to make logic easier.
                 fade_out();
                 banked_call(PRG_BANK_MAP_LOGIC, draw_current_map_to_a);
-                banked_call(PRG_BANK_MAP_LOGIC, init_map);
                 
                 // The draw map methods handle turning the ppu on/off, but we weren't quite done yet. Turn it back off.
                 ppu_off();
+                banked_call(PRG_BANK_MAP_LOGIC, init_map);
                 banked_call(PRG_BANK_HUD, draw_hud);
                 ppu_on_all();
                 fade_in();
@@ -134,7 +148,20 @@ void main(void) {
                 fade_in();
                 banked_call(PRG_BANK_MENU_INPUT_HELPERS, wait_for_start);
                 fade_out();
-                reset();
+                
+                banked_call(PRG_BANK_MAP_LOGIC, restore_game_over);
+                load_map();
+                banked_call(PRG_BANK_MAP_LOGIC, draw_current_map_to_a);
+
+                ppu_off();
+                banked_call(PRG_BANK_MAP_LOGIC, init_map);
+                banked_call(PRG_BANK_MAP_LOGIC, load_sprites);
+
+                banked_call(PRG_BANK_HUD, draw_hud);
+                ppu_on_all();
+                fade_in();
+                gameState = GAME_STATE_RUNNING;
+
                 break;
             case GAME_STATE_CREDITS:
                 music_stop();

@@ -91,3 +91,5 @@ void do_fade_screen_transition(void);
 
 // Defines world ids we use, which are also PRG bank ids to save storage and simplify code.
 #define WORLD_OVERWORLD PRG_BANK_MAP_OVERWORLD
+
+void restore_game_over(void);
