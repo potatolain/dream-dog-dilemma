@@ -151,17 +151,15 @@ void update_map_sprites(void) {
                 if (currentLayer == (currentSpriteData)) {
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 7;
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x68;
-                }
-                
-                if (currentLayer == currentSpriteData+1) {
+                } else if (currentLayer == currentSpriteData+1) {
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 16;
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x68;
-                } 
-                
-                if (currentLayer > currentSpriteData+1) {
+                } else if (currentLayer > currentSpriteData+1) {
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 32;
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x6c;
 
+                } else {
+                    goto skip_movement;
                 }
             }
 
@@ -273,12 +271,13 @@ void update_map_sprites(void) {
                     break;
             }
         }
+        skip_movement:
 
         sprX8 = sprX >> SPRITE_POSITION_SHIFT;
         sprY8 = sprY >> SPRITE_POSITION_SHIFT;
         tempMapSpriteIndex = (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_SIZE_PALETTE] & SPRITE_PALETTE_MASK) >> 6;
 
-                    // Is enemy and
+        // Is enemy and
         if (
             currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_REGULAR_ENEMY &&
             (
@@ -293,7 +292,7 @@ void update_map_sprites(void) {
                     currentLayer == (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE]) &&
                     frameCount & 0x08
                 )
-            )            
+            )
         ) {
             // Hide it and move on.
             oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, 0, 0, oamMapSpriteIndex);

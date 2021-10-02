@@ -251,8 +251,8 @@ void draw_current_map_to_nametable(int nametableAdr, int attributeTableAdr, unsi
             // Bunch of messy-looking stuff that tells neslib where to write this to the nametable, and how.
             mapScreenBuffer[0] = MSB(currentMemoryLocation) | NT_UPD_HORZ;
             mapScreenBuffer[1] = LSB(currentMemoryLocation);
-            mapScreenBuffer[2] = 65;
-            mapScreenBuffer[64 + NAMETABLE_UPDATE_PREFIX_LENGTH + 1] = NT_UPD_EOF;
+            mapScreenBuffer[2] = 64;
+            mapScreenBuffer[63 + NAMETABLE_UPDATE_PREFIX_LENGTH + 1] = NT_UPD_EOF;
             set_vram_update(mapScreenBuffer);
             ppu_wait_nmi();
             if (xScrollPosition != -1) {

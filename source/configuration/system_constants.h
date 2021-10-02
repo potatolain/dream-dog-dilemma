@@ -61,16 +61,21 @@
 // Constants for sound effects we play in the game
 #define SFX_HURT 0
 #define SFX_HEART 1
-#define SFX_KEY 2
+#define SFX_KEY 1
 #define SFX_GAMEOVER 3
 #define SFX_WIN 4
 
-#define SFX_DOOR 3
-#define SFX_HOLE_FORM 0
-#define SFX_FALLING 3
-
 // NEW STUFF NOT MADE YET
-#define SFX_EVERT 4
+#define SFX_EVERT 2
+#define SFX_DOOR 4
+#define SFX_HOLE_TRIGGER 5
+#define SFX_HOLE_FORM 6
+#define SFX_FALLING 7
+#define SFX_TEXT_BLIP 8
+
+#define SFX_PAUSE_UP 9
+#define SFX_PAUSE_DOWN 10
+
 
 // Constants for sfx channels. Completely unnecessary but it's easier to read
 #define SFX_CHANNEL_1 0

@@ -147,6 +147,8 @@ void main(void) {
 
                 // Draw the "you lose" screen
                 banked_call(PRG_BANK_GAME_OVER, draw_game_over_screen);
+                sfx_play(SFX_GAMEOVER, SFX_CHANNEL_1);
+
                 fade_in();
                 banked_call(PRG_BANK_MENU_INPUT_HELPERS, wait_for_start);
                 fade_out();
@@ -162,6 +164,7 @@ void main(void) {
                 banked_call(PRG_BANK_HUD, draw_hud);
                 ppu_on_all();
                 fade_in();
+                music_play(SONG_LAYERS + currentLayer);
                 gameState = GAME_STATE_RUNNING;
 
                 break;

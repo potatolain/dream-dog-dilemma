@@ -168,7 +168,6 @@ void damage_player(unsigned char dmg, unsigned char doBounceAndSfx) {
     if (playerHealth == 0 || playerHealth > 240) {
         gameState = GAME_STATE_GAME_OVER;
         music_stop();
-        sfx_play(SFX_GAMEOVER, SFX_CHANNEL_1);
         return;
     }
 
@@ -207,6 +206,7 @@ void handle_player_movement(void) {
 
     // If Start is pressed now, and was not pressed before...
     if (controllerState & PAD_START && !(lastControllerState & PAD_START)) {
+        sfx_play(SFX_PAUSE_UP, SFX_CHANNEL_1);
         gameState = GAME_STATE_PAUSED;
         return;
     }
@@ -512,7 +512,8 @@ void test_player_tile_collision(void) {
             
         } else if (collisionTileTemp == 4 && nearestCrack == 0xff) { // Crack
             nearestCrack = PLAYER_MAP_POSITION(collisionTempX, collisionTempY);
-            crackTimer = 60;
+            crackTimer = 40;
+            sfx_play(SFX_HOLE_TRIGGER, SFX_CHANNEL_2);
         }
     }
 

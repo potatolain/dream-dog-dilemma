@@ -132,6 +132,8 @@ void draw_game_text(void) {
             wait_for_sprite0_hit();
             set_chr_bank_0(CHR_BANK_TILES + currentLayer);
             set_vram_update(NULL);
+            sfx_play(SFX_TEXT_BLIP, SFX_CHANNEL_4);
+
 
         }
 
