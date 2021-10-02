@@ -77,7 +77,10 @@ void update_map_sprites(void) {
         }
 
 
-        if (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_OFFSCREEN) {
+        if (
+            // Offscreen type
+            currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_OFFSCREEN         
+        ) {
             // Hide it and move on.
             oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, 0, 0, oamMapSpriteIndex);
             oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, 0, 0, oamMapSpriteIndex + 4);
@@ -140,6 +143,27 @@ void update_map_sprites(void) {
         // We only want to do movement once every other frame, to save some cpu time.
         // So, split this to update even sprites on even frames, odd sprites on odd frames
         if ((i & 0x01) == everyOtherCycle) {
+
+            if (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_REGULAR_ENEMY) {
+                // HACK: Using this since we rewrite below anyway - active dimension
+                currentSpriteData = currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE];
+
+                if (currentLayer == (currentSpriteData)) {
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 7;
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x68;
+                }
+                
+                if (currentLayer == currentSpriteData+1) {
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 16;
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x68;
+                } 
+                
+                if (currentLayer > currentSpriteData+1) {
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 32;
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x6c;
+
+                }
+            }
 
             switch (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVEMENT_TYPE]) {
                 case SPRITE_MOVEMENT_LEFT_RIGHT:
@@ -253,45 +277,72 @@ void update_map_sprites(void) {
         sprX8 = sprX >> SPRITE_POSITION_SHIFT;
         sprY8 = sprY >> SPRITE_POSITION_SHIFT;
         tempMapSpriteIndex = (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_SIZE_PALETTE] & SPRITE_PALETTE_MASK) >> 6;
-        if (currentSpriteSize == SPRITE_SIZE_8PX_8PX) {
-            oam_spr(
-                sprX8 + (NES_SPRITE_WIDTH/2),
-                sprY8 + (NES_SPRITE_HEIGHT/2),
-                currentSpriteTileId,
-                tempMapSpriteIndex,
-                oamMapSpriteIndex
-            );
-        } else if (currentSpriteSize == SPRITE_SIZE_16PX_16PX) {
-            oam_spr(
-                sprX8,
-                sprY8,
-                currentSpriteTileId,
-                tempMapSpriteIndex,
-                oamMapSpriteIndex
-            );
-            oam_spr(
-                sprX8 + NES_SPRITE_WIDTH,
-                sprY8,
-                currentSpriteTileId + 1,
-                tempMapSpriteIndex,
-                oamMapSpriteIndex + 4
-            );
-            oam_spr(
-                sprX8,
-                sprY8 + NES_SPRITE_HEIGHT,
-                currentSpriteTileId + 16,
-                tempMapSpriteIndex,
-                oamMapSpriteIndex + 8
-            );
-            oam_spr(
-                sprX8 + NES_SPRITE_WIDTH,
-                sprY8 + NES_SPRITE_HEIGHT,
-                currentSpriteTileId + 17,
-                tempMapSpriteIndex,
-                oamMapSpriteIndex + 12
-            );
+
+                    // Is enemy and
+        if (
+            currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_REGULAR_ENEMY &&
+            (
+                // None show up in layer 0 (also the lines below blow up if called on 0)
+                currentLayer == 0 ||
+
+                // Not a valid location
+                currentLayer < (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE]) ||
+
+                // Blinking interval, if exactly dim-1
+                ( 
+                    currentLayer == (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE]) &&
+                    frameCount & 0x08
+                )
+            )            
+        ) {
+            // Hide it and move on.
+            oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, 0, 0, oamMapSpriteIndex);
+            oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, 0, 0, oamMapSpriteIndex + 4);
+            oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, 0, 0, oamMapSpriteIndex + 8);
+            oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, 0, 0, oamMapSpriteIndex + 12);
+            continue;
+        } else {
+
+            if (currentSpriteSize == SPRITE_SIZE_8PX_8PX) {
+                oam_spr(
+                    sprX8 + (NES_SPRITE_WIDTH/2),
+                    sprY8 + (NES_SPRITE_HEIGHT/2),
+                    currentSpriteTileId,
+                    tempMapSpriteIndex,
+                    oamMapSpriteIndex
+                );
+            } else if (currentSpriteSize == SPRITE_SIZE_16PX_16PX) {
+                oam_spr(
+                    sprX8,
+                    sprY8,
+                    currentSpriteTileId,
+                    tempMapSpriteIndex,
+                    oamMapSpriteIndex
+                );
+                oam_spr(
+                    sprX8 + NES_SPRITE_WIDTH,
+                    sprY8,
+                    currentSpriteTileId + 1,
+                    tempMapSpriteIndex,
+                    oamMapSpriteIndex + 4
+                );
+                oam_spr(
+                    sprX8,
+                    sprY8 + NES_SPRITE_HEIGHT,
+                    currentSpriteTileId + 16,
+                    tempMapSpriteIndex,
+                    oamMapSpriteIndex + 8
+                );
+                oam_spr(
+                    sprX8 + NES_SPRITE_WIDTH,
+                    sprY8 + NES_SPRITE_HEIGHT,
+                    currentSpriteTileId + 17,
+                    tempMapSpriteIndex,
+                    oamMapSpriteIndex + 12
+                );
 
 
+            }
         }
 
         // While we have all the data above, let's see if the player hit us.
