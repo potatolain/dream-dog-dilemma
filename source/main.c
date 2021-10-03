@@ -136,18 +136,23 @@ void main(void) {
                 // When we get here, the player has unpaused. 
                 // Pause has its own mini main loop in handle_input to make logic easier.
                 fade_out();
-                banked_call(PRG_BANK_MAP_LOGIC, draw_current_map_to_a);
-                
-                // The draw map methods handle turning the ppu on/off, but we weren't quite done yet. Turn it back off.
-                ppu_off();
-                banked_call(PRG_BANK_MAP_LOGIC, init_map);
-                banked_call(PRG_BANK_HUD, draw_hud);
-                ppu_on_all();
-                fade_in();
+
+                if (gameState != GAME_STATE_GAME_OVER_1) {
+                    banked_call(PRG_BANK_MAP_LOGIC, draw_current_map_to_a);
+                    
+                    // The draw map methods handle turning the ppu on/off, but we weren't quite done yet. Turn it back off.
+                    ppu_off();
+                    banked_call(PRG_BANK_MAP_LOGIC, init_map);
+                    banked_call(PRG_BANK_HUD, draw_hud);
+                    ppu_on_all();
+                    fade_in();
+                }
 
                 break;
             case GAME_STATE_GAME_OVER:
+
                 fade_out();
+            case GAME_STATE_GAME_OVER_1:
 
                 // Draw the "you lose" screen
                 banked_call(PRG_BANK_GAME_OVER, draw_game_over_screen);
@@ -157,6 +162,7 @@ void main(void) {
                 banked_call(PRG_BANK_MENU_INPUT_HELPERS, wait_for_start);
                 fade_out();
                 
+
                 banked_call(PRG_BANK_MAP_LOGIC, restore_game_over);
                 load_map();
                 banked_call(PRG_BANK_MAP_LOGIC, draw_current_map_to_a);
