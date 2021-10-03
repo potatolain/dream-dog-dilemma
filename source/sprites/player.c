@@ -184,6 +184,39 @@ const unsigned char* onTheEdge ="This area feels extremely     "
 
                                 "I lived through 2020!";
 
+const unsigned char* castle =   "This is MY castle! ALL MINE!  "
+                                "                              "
+                                "                              "
+                                "You're not invited - get out! "
+                                "                              "
+                                "                              "
+
+                                "What do you mean, my island   "
+                                "has no exit? There is no need."
+                                "                              "
+
+                                "Stay with me and my key       "
+                                "forever then!";
+                                
+
+const unsigned char* million =  "I always said I'd live in a   "
+                                "huge house if I got a million "
+                                "dollars.                      "
+
+                                "Of course when it was offered,"
+                                "I accepted immediately!       "
+                                "                              "
+
+                                "I was absolutely shocked when "
+                                "the offer was real! I just had"
+                                "to wear a special visor.      "
+
+                                "Of course, now I'm here.      "
+                                "At least I have my house.";
+
+const unsigned char* dogdogdog ="There is a puppy in that      "
+                                "building!!!!";
+
 
 const unsigned char screenKeyCounts[] = {
     1, 2, 2, 0, 3, 0, 2, 0,
@@ -192,7 +225,7 @@ const unsigned char screenKeyCounts[] = {
     0, 0, 0, 4, 3, 0, 0, 0,
     0, 0, 4, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 5, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
 };
 
@@ -201,9 +234,9 @@ const unsigned char** screenMessages[] = {
     &secondPageText,    0,              0,              0,              &whyIsTheDesert,&bigComputer,   &desssert,      0,
     0,                  0,              0,              &cottage,       0,              0,              0,              0,
     0,                  0,              0,              0,              &oasis,         0,              0,              0,
-    0,                  0,              &onTheEdge,     0,              &trapped,       0,              0,              0,
-    0,                  0,              0,              0,              0,              0,              0,              0,
-    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  &castle,        &onTheEdge,     0,              &trapped,       0,              0,              0,
+    &million,           0,              0,              0,              0,              0,              0,              0,
+    0,                  &dogdogdog,     0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0
 };
 
@@ -212,8 +245,8 @@ const unsigned char screenDimensions[] = {
     0, 0, 0, 0, 1, 3, 2, 0,
     0, 0, 0, 1, 0, 0, 0, 0,
     0, 0, 0, 0, 2, 0, 0, 0,
-    0, 0, 3, 0, 2, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 3, 3, 0, 2, 0, 0, 0,
+    3, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
 };

@@ -61,7 +61,7 @@ void handle_title_input(void) {
 		#if DEBUG == 1
 			// DEBUG SCREEN
 			if (pad_poll(0) & PAD_SELECT) {
-				playerOverworldPosition = 18;
+				playerOverworldPosition = 41;
 			}
 		#endif
 

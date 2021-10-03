@@ -36,10 +36,10 @@ void draw_win_screen(void) {
 
     // Hide all existing sprites
     oam_clear();
-    oam_spr(14<<3, 21<<3, 0x4c, 2, 0x10);
-    oam_spr(15<<3, 21<<3, 0x4d, 2, 0x14);
-    oam_spr(14<<3, 22<<3, 0x5c, 2, 0x18);
-    oam_spr(15<<3, 22<<3, 0x5d, 2, 0x1c);
+    oam_spr(14<<3, 20<<3, 0x4c, 2, 0x10);
+    oam_spr(15<<3, 20<<3, 0x4d, 2, 0x14);
+    oam_spr(14<<3, 21<<3, 0x5c, 2, 0x18);
+    oam_spr(15<<3, 21<<3, 0x5d, 2, 0x1c);
 
     ppu_on_all();
 
