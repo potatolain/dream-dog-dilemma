@@ -218,7 +218,7 @@ void __fastcall__ do_ppu_mess(void) {
         return;
     }
     if (currentLayer == 3) {
-        if ((frameCount & 0xf0) == 0x10) {
+        if ((frameCount & 0xf0) < 0x40 && rand8() > 200) {
             derp = rand8();
             //*(unsigned char*)0x2000 = 0;
             __asm__("lda $2002");
@@ -230,10 +230,16 @@ void __fastcall__ do_ppu_mess(void) {
                 __asm__("nop");
             }
         }
+
+        if ((frameCount & 0xf0) == 0x20 && rand8() > 200) {
+            set_chr_bank_0(CHR_BANK_TILES + currentLayer + 2);
+        } else {
+            set_chr_bank_0(CHR_BANK_TILES + currentLayer);
+        }
     }
 
     if (currentLayer == 4) {
-        if ((frameCount & 0xf0) > 0xb0) {
+        if ((frameCount & 0xf0) > 0xb0 && rand8() > 100) {
             derp = rand8();
             //*(unsigned char*)0x2000 = 0;
             __asm__("lda $2002");
@@ -244,6 +250,12 @@ void __fastcall__ do_ppu_mess(void) {
             for (derp = 0; derp < 200; ++derp) {
                 __asm__("nop");
             }
+        }
+
+        if ((frameCount & 0xf0) > 0x90 && rand8() > 100) {
+            set_chr_bank_0(CHR_BANK_TILES + currentLayer + 2);
+        } else {
+            set_chr_bank_0(CHR_BANK_TILES + currentLayer);
         }
 
     }
