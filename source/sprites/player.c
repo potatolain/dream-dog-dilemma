@@ -226,6 +226,22 @@ const unsigned char* corruptWarn =
                                 "the world! Too much coding    "
                                 "today...";
 
+
+const unsigned char* breakTxt = "They enticed me to join the   "
+                                "experiment by telling me they "
+                                "would give me a break!        "
+                                
+                                "This isn't what I had in mind.";
+
+
+const unsigned char* planeTxt = "I was promised a private plane"
+                                "if I participated in the      "
+                                "experiment!                   "
+                                
+                                "Of course, it was a verbal    "
+                                "agreement, and look where I   "
+                                "am now... ";
+
 const unsigned char screenKeyCounts[] = {
     1, 2, 2, 0, 3, 0, 2, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -240,10 +256,10 @@ const unsigned char screenKeyCounts[] = {
 const unsigned char** screenMessages[] = {
     &firstPageText,     &escapers,      0,              0,              &corruptWarn,   0,              0,              0,
     &secondPageText,    0,              0,              0,              &whyIsTheDesert,&bigComputer,   &desssert,      0,
-    0,                  0,              0,              &cottage,       0,              0,              0,              0,
+    0,                  0,              0,              &cottage,       0,              &planeTxt,      0,              0,
     0,                  0,              0,              0,              &oasis,         0,              0,              0,
     0,                  &castle,        &onTheEdge,     0,              &trapped,       0,              0,              0,
-    &million,           0,              0,              0,              0,              0,              0,              0,
+    &million,           &breakTxt,      0,              0,              0,              0,              0,              0,
     0,                  &dogdogdog,     0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0
 };
@@ -251,10 +267,10 @@ const unsigned char** screenMessages[] = {
 const unsigned char screenDimensions[] = {
     0, 0, 0, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 1, 3, 2, 0,
-    0, 0, 0, 1, 0, 0, 0, 0,
+    0, 0, 0, 1, 0, 1, 0, 0,
     0, 0, 0, 0, 2, 0, 0, 0,
     0, 3, 3, 0, 2, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0,
+    3, 1, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
 };
