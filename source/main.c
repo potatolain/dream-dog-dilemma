@@ -114,6 +114,7 @@ void main(void) {
             case GAME_STATE_SCREEN_SCROLL:
                 // Hide all non-player sprites in play, so we have an empty screen to add new ones to
                 oam_hide_rest(FIRST_ENEMY_SPRITE_OAM_INDEX);
+                *((unsigned char*)0x204) = SPRITE_OFFSCREEN;
 
                 // If you don't like the screen scrolling transition, you can replace the transition with `do_fade_screen_transition`
                 banked_call(PRG_BANK_MAP_LOGIC, do_scroll_screen_transition);
