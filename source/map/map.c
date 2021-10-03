@@ -121,8 +121,9 @@ void clear_asset_table(containsHud) {
         assetTable[i] = 0x00;
     }
     // The last row of the asset table uses the 4th palette to show the HUD correctly.
+    // NOT ANYMORE
     for (; i != sizeof(assetTable); ++i) {
-        assetTable[i] = containsHud == 0 ? 0x00 : 0xff;
+        assetTable[i] = containsHud == 0 ? 0x00 : 0x00;// 0xff;
     }
 }
 
