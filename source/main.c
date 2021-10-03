@@ -114,6 +114,7 @@ void main(void) {
             case GAME_STATE_SCREEN_SCROLL:
                 // Hide all non-player sprites in play, so we have an empty screen to add new ones to
                 oam_hide_rest(FIRST_ENEMY_SPRITE_OAM_INDEX);
+                crackTimer = 0; // Cancel crack creation, that does all kinds of bad stuff if it happens unexpectedly
                 *((unsigned char*)0x204) = SPRITE_OFFSCREEN;
 
                 // If you don't like the screen scrolling transition, you can replace the transition with `do_fade_screen_transition`

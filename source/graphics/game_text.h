@@ -17,7 +17,7 @@
 // data later in the bank. We have to subtract this constantly though, so we made a constant.
 #define TEXT_ASCII_SKIPPED_CHARACTERS 0x20
 
-void trigger_game_text(const unsigned char* string);
+void trigger_game_text(const unsigned char* string, unsigned char doCorrupt);
 
 // Draw text to the screen and handle input for it - this can span multiple screens depending on text length.
 void draw_game_text(void);

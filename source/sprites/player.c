@@ -115,10 +115,43 @@ const unsigned char* secondPageOtherDimensionText =
                                 "have never found your way     "
                                 "home. I'm sorry.";
 
+const unsigned char* whyIsTheDesert = 
+                                "I have been trapped out here  "
+                                "for ages. It's just desert as "
+                                "far as the eyes can see!      "
+
+                                "I'm not getting the free      "
+                                "balloon the doctor promised me"
+                                "for participating in this     "
+
+                                "experiment, am I?";
+
 
 const unsigned char screenKeyCounts[] = {
-    1, 2, 2, 0, 2, 0, 0, 0,
+    1, 2, 2, 0, 3, 0, 2, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0
+};
+
+const unsigned char** screenMessages[] = {
+    &firstPageText,     0,              0,              0,              0,              0,              0,              0,
+    &secondPageText,    0,              0,              0,              0,              0,              &whyIsTheDesert,0,
+    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  0,              0,              0,              0,              0,              0,              0
+};
+
+const unsigned char screenDimensions[] = {
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 2, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -551,7 +584,7 @@ void test_player_tile_collision(void) {
             
         } else if (collisionTileTemp == 4 && nearestCrack == 0xff) { // Crack
             nearestCrack = PLAYER_MAP_POSITION(collisionTempX, collisionTempY);
-            crackTimer = 40;
+            crackTimer = 20;
             sfx_play(SFX_HOLE_TRIGGER, SFX_CHANNEL_2);
         }
     }
@@ -719,7 +752,7 @@ void handle_player_sprite_collision(void) {
 
                 if (controllerState & PAD_A && !(lastControllerState & PAD_A)) {
                     // Show the text for the player on the first screen
-                    switch (playerOverworldPosition) {
+                    /*switch (playerOverworldPosition) {
                         case 0:
                             if (currentLayer == 0) {
                                 trigger_game_text(firstPageText);
@@ -739,6 +772,14 @@ void handle_player_sprite_collision(void) {
                         default:
                             trigger_game_text(defaultText);
                             break;
+                    }*/
+
+                    if (screenMessages[playerOverworldPosition] != 0) {
+                        if (screenDimensions[playerOverworldPosition] == currentLayer) {
+                            trigger_game_text(*screenMessages[playerOverworldPosition], 0);
+                        } else {
+                            trigger_game_text(*screenMessages[playerOverworldPosition], 1);
+                        }
                     }
                 }
                 break;

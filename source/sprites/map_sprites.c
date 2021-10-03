@@ -39,6 +39,7 @@ ZEROPAGE_DEF(unsigned char, currentMapSpriteIndex);
 
 // im lazy HaCK
 extern const unsigned char screenKeyCounts[];
+extern const unsigned char screenDimensions[];
 
 // Forward definition of this method; code is at the bottom of this file. Ignore this for now!
 void do_sprite_movement_with_collision(void);
@@ -280,21 +281,28 @@ void update_map_sprites(void) {
         sprY8 = sprY >> SPRITE_POSITION_SHIFT;
         tempMapSpriteIndex = (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_SIZE_PALETTE] & SPRITE_PALETTE_MASK) >> 6;
 
-        // Is enemy and
         if (
-            currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_REGULAR_ENEMY &&
             (
-                // None show up in layer 0 (also the lines below blow up if called on 0)
-                currentLayer == 0 ||
+                // Is enemy and
+                currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_REGULAR_ENEMY &&
+                (
+                    // None show up in layer 0 (also the lines below blow up if called on 0)
+                    currentLayer == 0 ||
 
-                // Not a valid location
-                currentLayer < (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE]) ||
+                    // Not a valid location
+                    currentLayer < (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE]) ||
 
-                // Blinking interval, if exactly dim-1
-                ( 
-                    currentLayer == (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE]) &&
-                    frameCount & 0x08
+                    // Blinking interval, if exactly dim-1
+                    ( 
+                        currentLayer == (currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE]) &&
+                        frameCount & 0x08
+                    )
                 )
+            ) ||
+            (
+                currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TYPE] == SPRITE_TYPE_NPC &&
+                currentLayer != screenDimensions[playerOverworldPosition] &&
+                frameCount & 0x04
             )
         ) {
             // Hide it and move on.

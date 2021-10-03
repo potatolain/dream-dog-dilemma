@@ -9,6 +9,7 @@
 
 unsigned char* currentText;
 unsigned char currentBank;
+unsigned char doCorrupt;
 
 #define haveHitNull tempChar1
 #define bufferIndex tempChar2
@@ -16,10 +17,11 @@ unsigned char currentBank;
 #define currentChar tempChar4
 #define stringIndex tempInt1
 
-void trigger_game_text(const unsigned char* string) {
+void trigger_game_text(const unsigned char* string, unsigned char _doCorrupt) {
     gameState = GAME_STATE_SHOWING_TEXT;
     currentText = (unsigned char*)string;
     currentBank = get_prg_bank();
+    doCorrupt = _doCorrupt;
 }
 
 // private method in the primary bank to load characters from the bank the text resides in. We have to keep
@@ -116,6 +118,9 @@ void draw_game_text(void) {
                     buffer[bufferIndex] = ' ' - TEXT_ASCII_SKIPPED_CHARACTERS;
                 } else {
                     set_char_at_buffer_index();
+                    if (doCorrupt && currentChar != 0) {
+                        currentChar = (currentChar + rand8()) & 0x7f;
+                    }
                     if (currentChar == NULL) {
                         // Mark us as having hit the null terminator, so we stop trying to draw text.
                         haveHitNull = TRUE;
