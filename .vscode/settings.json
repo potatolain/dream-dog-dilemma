@@ -2,6 +2,7 @@
     "terminal.integrated.shell.windows": "C:\\cygwin64\\bin\\bash.exe",
     "files.associations": {
         "sprite_definitions.h": "c",
-        "map_sprites.h": "c"
+        "map_sprites.h": "c",
+        "neslib.h": "c"
     }
 }

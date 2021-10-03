@@ -229,7 +229,9 @@ void damage_player(unsigned char dmg, unsigned char doBounceAndSfx) {
     // NOTE: If something manages to do more than 16 damage at once, this might fail.
     if (playerHealth == 0 || playerHealth > 240) {
         gameState = GAME_STATE_GAME_OVER;
+        if (doBounceAndSfx) { sfx_play(SFX_HURT, SFX_CHANNEL_2); }
         music_stop();
+        delay(20);
         return;
     }
 
