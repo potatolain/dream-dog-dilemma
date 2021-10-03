@@ -3,7 +3,7 @@
 
 #define HUD_POSITION_START 0x0300
 #define HUD_HEART_START 0x0361
-#define HUD_KEY_START 0x037b
+#define HUD_KEY_START 0x037a
 #define HUD_ATTRS_START 0x03f0
 
 #define HUD_TILE_HEART 0xe7

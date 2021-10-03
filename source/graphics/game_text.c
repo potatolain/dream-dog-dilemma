@@ -149,9 +149,9 @@ void draw_game_text(void) {
 
         // Draw the "more text" arrow if there is more text to go, _and_ we're not on an "off" frame
         if (!haveHitNull && (frameCount & 0x20)) {
-            oam_spr(244, HUD_PIXEL_HEIGHT - 14, SPRITE_TILE_ID_TEXT_ARROW, 0x00, TEXT_ARROW_OAM_ID);
+            oam_spr(244, HUD_PIXEL_HEIGHT - 14, SPRITE_TILE_ID_TEXT_ARROW, 0x01, TEXT_ARROW_OAM_ID);
         } else {
-            oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, SPRITE_TILE_ID_TEXT_ARROW, 0x00, TEXT_ARROW_OAM_ID);
+            oam_spr(SPRITE_OFFSCREEN, SPRITE_OFFSCREEN, SPRITE_TILE_ID_TEXT_ARROW, 0x01, TEXT_ARROW_OAM_ID);
         }
         ppu_wait_nmi();
         wait_for_sprite0_hit();
