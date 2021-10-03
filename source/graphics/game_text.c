@@ -120,6 +120,14 @@ void draw_game_text(void) {
                     set_char_at_buffer_index();
                     if (doCorrupt && currentChar != 0) {
                         currentChar = (currentChar + rand8()) & 0x7f;
+
+                        // There is a very, VERY small chance this could cause a crash I saw in the last 5 minutes
+                        // of the jam. If a string of text ends exactly where a new page starts, the engine can 
+                        // crash. This tries to sidestep that problem.
+                        // NOTE: This was put in at the VERY end of the jam as a bugfix. If things break, consider removing it!
+                        if (currentChar == 0) {
+                            currentChar = 1;
+                        }
                     }
                     if (currentChar == NULL) {
                         // Mark us as having hit the null terminator, so we stop trying to draw text.
