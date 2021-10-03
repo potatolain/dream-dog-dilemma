@@ -13,6 +13,36 @@
                 "kind": "build",
                 "isDefault": true,
             }
+        },
+        {
+            "label": "do1",
+            "type": "shell",
+            "command": "/usr/bin/make L=green generate_graphics",
+            "group": "build"
+        },
+        {
+            "label": "do2",
+            "type": "shell",
+            "command": "/usr/bin/make L=autumn generate_graphics",
+            "group": "build"
+        },
+        {
+            "label": "do3",
+            "type": "shell",
+            "command": "/usr/bin/make L=desert generate_graphics",
+            "group": "build"
+        },
+        {
+            "label": "do4",
+            "type": "shell",
+            "command": "/usr/bin/make L=unstable generate_graphics",
+            "group": "build"
+        },
+        {
+            "label": "do5",
+            "type": "shell",
+            "command": "/usr/bin/make L=comp generate_graphics",
+            "group": "build"
         }
     ]
 }

@@ -117,7 +117,7 @@ const unsigned char* secondPageOtherDimensionText =
 
 
 const unsigned char screenKeyCounts[] = {
-    1, 2, 2, 0, 0, 0, 0, 0,
+    1, 2, 2, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -202,7 +202,6 @@ void do_layer_anim(unsigned char toLayer) {
     currentLayer = toLayer;
     // Force a sprite refresh to avoid a flash of the old state
     update_map_sprites();
-    // TODO: some shit
 
     ppu_off();
 

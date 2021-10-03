@@ -29,6 +29,9 @@ CODE_BANK(PRG_BANK_MAP_SPRITES);
 #define currentSpriteFullTileCollisionWidth tempInt4
 #define currentSpriteFullTileCollisionHeight tempInt4
 
+// Lookup is based on HEALTH val (byte 6)
+const unsigned char baseSpriteSpeeds[] = { 0, 0, 16, 24 };
+
 
 
 ZEROPAGE_DEF(unsigned char, lastPlayerSpriteCollisionId);
@@ -149,13 +152,13 @@ void update_map_sprites(void) {
                 currentSpriteData = currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_DAMAGE];
 
                 if (currentLayer == (currentSpriteData)) {
-                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 7;
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = baseSpriteSpeeds[currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_HEALTH]] >> 1;
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x68;
                 } else if (currentLayer == currentSpriteData+1) {
-                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 16;
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = baseSpriteSpeeds[currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_HEALTH]];
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x68;
                 } else if (currentLayer > currentSpriteData+1) {
-                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = 32;
+                    currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_MOVE_SPEED] = baseSpriteSpeeds[currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_HEALTH]] << 1;
                     currentMapSpriteData[currentMapSpriteIndex + MAP_SPRITE_DATA_POS_TILE_ID] = 0x6c;
 
                 } else {

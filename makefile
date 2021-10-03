@@ -140,6 +140,11 @@ rebuild_tools:
 	pkg -d --public tools/sprite_def2img/src/index.js --output tools/sprite_def2img/sprite_def2img.exe -t node8-windows-x64
 	pkg -d --public tools/tmx2c/src/index.js --output tools/tmx2c/tmx2c.exe -t node8-windows-x64
 
+# Usage: desert
+generate_graphics: 
+	echo "Doing graphics for $(L)"
+	node ./paldump.js
+	$(CHR2IMG) graphics/tiles_$(L).chr graphics/generated/pal_$(L).pal graphics/generated/tiles.png
 
 clean:
 	-rm -f rom/*.nes

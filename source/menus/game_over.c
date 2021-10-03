@@ -21,8 +21,18 @@ void draw_game_over_screen(void) {
 	set_chr_bank_0(CHR_BANK_MENU);
     set_chr_bank_1(CHR_BANK_MENU);
 
-    // Just write "- Paused -" on the screen... there's plenty of nicer things you could do if you wanna spend time!
-    put_str(NTADR_A(11, 13), "Game Over");
+    put_str(NTADR_A(8, 8), "You blacked out!");
+
+    put_str(NTADR_A(3, 16), " You find yourself awake");
+    put_str(NTADR_A(3, 17), "   in a familiar place");
+    put_str(NTADR_A(3, 21), "  That must have been");
+    put_str(NTADR_A(3, 22), "      a nightmare");
+    //  "                                "
+    //  "        You blacked out!        "
+    //  "                                "
+    //  " You find yourself awake in a   "
+    //  " familiar place. That must have "
+    //  " been a nightmare.");
 
 
 
