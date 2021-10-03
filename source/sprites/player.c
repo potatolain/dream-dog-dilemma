@@ -175,13 +175,22 @@ const unsigned char* cottage =  "I always wanted my own seaside"
                                 "I should have known their     "
                                 "offer was too good to be true.";
 
+const unsigned char* onTheEdge ="This area feels extremely     "
+                                "unstable.                     "
+                                "                              "
+                                "What do you mean, \"how can I  "
+                                "tell what unstable feels      "
+                                "like?\"                        "
+
+                                "I lived through 2020!";
+
 
 const unsigned char screenKeyCounts[] = {
     1, 2, 2, 0, 3, 0, 2, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 4, 3, 0, 0, 0,
-    0, 0, 0, 0, 2, 0, 0, 0,
+    0, 0, 4, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
@@ -192,7 +201,7 @@ const unsigned char** screenMessages[] = {
     &secondPageText,    0,              0,              0,              &whyIsTheDesert,&bigComputer,   &desssert,      0,
     0,                  0,              0,              &cottage,       0,              0,              0,              0,
     0,                  0,              0,              0,              &oasis,         0,              0,              0,
-    0,                  0,              0,              0,              &trapped,       0,              0,              0,
+    0,                  0,              &onTheEdge,     0,              &trapped,       0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0
@@ -203,7 +212,7 @@ const unsigned char screenDimensions[] = {
     0, 0, 0, 0, 1, 3, 2, 0,
     0, 0, 0, 1, 0, 0, 0, 0,
     0, 0, 0, 0, 2, 0, 0, 0,
-    0, 0, 0, 0, 2, 0, 0, 0,
+    0, 0, 3, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
