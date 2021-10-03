@@ -10,19 +10,21 @@
 #include "graphics/intro.h"
 #include "source/menus/input_helpers.h"
 #include "source/graphics/fade_animation.h"
+#include "graphics/title.h"
 
 CODE_BANK(PRG_BANK_TITLE);
 
+extern const unsigned char layerBasedPalettes[];
 void draw_title_screen(void) {
     ppu_off();
-	pal_bg(titlePalette);
-	pal_spr(titlePalette);
+	pal_bg(&layerBasedPalettes[0]);
+	pal_spr(mainSpritePalette);
 
 	set_chr_bank_0(CHR_BANK_MENU);
-    set_chr_bank_1(CHR_BANK_MENU);
+    set_chr_bank_1(CHR_BANK_SPRITES);
 	clear_screen();
 	oam_clear();
-
+/*
     
     put_str(NTADR_A(7, 5), gameName);
 	
@@ -33,10 +35,19 @@ void draw_title_screen(void) {
 	put_str(NTADR_A(17, 28), gameAuthor);
 
 	put_str(NTADR_A(10, 16), "Press Start!");
-
+*/
+	vram_unrle(title);
 	#if DEBUG == 1
-		put_str(NTADR_A(2, 27), "DEBUG MODE ENABLED");
+		put_str(NTADR_A(2, 28), "DEBUG MODE ENABLED");
 	#endif
+
+	oam_clear();
+	tempChar1 = (frameCount & 0x10) >> 3;
+    oam_spr(15<<3, 17<<3, tempChar1, 0, 0x10);
+    oam_spr(16<<3, 17<<3, tempChar1 + 0x01, 0, 0x14);
+    oam_spr(15<<3, 18<<3, tempChar1 + 0x10, 0, 0x18);
+    oam_spr(16<<3, 18<<3, tempChar1 + 0x11, 0, 0x1c);
+
 
 	ppu_on_all();
 
@@ -56,11 +67,21 @@ void handle_title_input(void) {
 
 		sfx_play(SFX_PAUSE_UP, SFX_CHANNEL_1);
 	}
+
+	oam_clear();
+	tempChar1 = (frameCount & 0x10) >> 3;
+    oam_spr(15<<3, 17<<3, tempChar1, 0, 0x10);
+    oam_spr(16<<3, 17<<3, tempChar1 + 0x01, 0, 0x14);
+    oam_spr(15<<3, 18<<3, tempChar1 + 0x10, 0, 0x18);
+    oam_spr(16<<3, 18<<3, tempChar1 + 0x11, 0, 0x1c);
+	ppu_wait_nmi();
 }
 
 void draw_intro(void) {
 	fade_out();
 	ppu_off();
+	oam_clear();
+	pal_bg(titlePalette);
 	vram_adr(0x2000);
 	vram_unrle(intro);
 	ppu_on_all();
