@@ -11,6 +11,7 @@
 #include "source/menus/input_helpers.h"
 #include "source/graphics/fade_animation.h"
 #include "graphics/title.h"
+#include "graphics/epilepsy.h"
 
 CODE_BANK(PRG_BANK_TITLE);
 
@@ -84,6 +85,21 @@ void draw_intro(void) {
 	pal_bg(titlePalette);
 	vram_adr(0x2000);
 	vram_unrle(intro);
+	ppu_on_all();
+	fade_in();
+
+	banked_call(PRG_BANK_MENU_INPUT_HELPERS, wait_for_start);
+
+	sfx_play(SFX_PAUSE_UP, SFX_CHANNEL_1);
+}
+
+void draw_warning(void) {
+	fade_out();
+	ppu_off();
+	oam_clear();
+	pal_bg(titlePalette);
+	vram_adr(0x2000);
+	vram_unrle(epilepsy);
 	ppu_on_all();
 	fade_in();
 

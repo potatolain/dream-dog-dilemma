@@ -22,6 +22,8 @@ This has the main loop for the game, which is then used to call out to other cod
 #include "source/menus/input_helpers.h"
 #include "source/menus/game_over.h"
 
+void draw_warning(void);
+
 
 // Method to set a bunch of variables to default values when the system starts up.
 // Note that if variables aren't set in this method, they will start at 0 on NES startup.
@@ -81,6 +83,7 @@ void main(void) {
             case GAME_STATE_POST_TITLE:
 
                 banked_call(PRG_BANK_TITLE, draw_intro);
+                banked_call(PRG_BANK_TITLE, draw_warning);
 
                 music_stop();
                 fade_out();
