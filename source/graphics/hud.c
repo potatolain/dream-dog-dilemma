@@ -32,7 +32,7 @@ void update_hud(void) {
     // We use i for the index on screen buffer, so we don't have to shift things around
     // as we add values. 
     i = 0;
-    screenBuffer[i++] = MSB(NAMETABLE_A + HUD_HEART_START) | NT_UPD_HORZ;
+    /*screenBuffer[i++] = MSB(NAMETABLE_A + HUD_HEART_START) | NT_UPD_HORZ;
     screenBuffer[i++] = LSB(NAMETABLE_A + HUD_HEART_START);
     screenBuffer[i++] = playerMaxHealth;
     // Add one heart for every health the player has
@@ -42,7 +42,7 @@ void update_hud(void) {
     // Using the same variable, add empty hearts up to max health
     for (; j != playerMaxHealth; ++j) {
         screenBuffer[i++] = HUD_TILE_HEART_EMPTY;
-    }
+    }*/
 
     // Next, draw the key count, using the key tile, and our key count variable
     // Next, draw the key count, using the key tile, and our key count variable
@@ -54,11 +54,16 @@ void update_hud(void) {
     screenBuffer[i++] = HUD_TILE_NUMBER + playerKeyCount;
 
 
-    screenBuffer[i++] = MSB(NAMETABLE_A + 0x370) | NT_UPD_HORZ;
-    screenBuffer[i++] = LSB(NAMETABLE_A + 0x370);
-    screenBuffer[i++] = 2;
-    screenBuffer[i++] = 0xeb;
-    screenBuffer[i++] = HUD_TILE_NUMBER + currentLayer;
+    screenBuffer[i++] = MSB(NAMETABLE_A + HUD_HEART_START) | NT_UPD_HORZ;
+    screenBuffer[i++] = LSB(NAMETABLE_A + HUD_HEART_START);
+    screenBuffer[i++] = 7;
+    screenBuffer[i++] = 0xf3;
+    screenBuffer[i++] = 0xec;
+    screenBuffer[i++] = 0xed;
+    screenBuffer[i++] = 0xee;
+    screenBuffer[i++] = 0xef;
+    screenBuffer[i++] = 0xf0;
+    screenBuffer[i++] = HUD_TILE_NUMBER + currentLayer + 1;
     // screenBuffer[i++] = HUD_TILE_NUMBER + playerKeyCount;
 
 

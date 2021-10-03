@@ -28,8 +28,8 @@ This has the main loop for the game, which is then used to call out to other cod
 void initialize_variables(void) {
 
     playerOverworldPosition = 0; // Which tile on the overworld to start with; 0-62
-    playerHealth = 5; // Player's starting health - how many hearts to show on the HUD.
-    playerMaxHealth = 5; // Player's max health - how many hearts to let the player collect before it doesn't count.
+    playerHealth = 1; // Player's starting health - how many hearts to show on the HUD.
+    playerMaxHealth = 1; // Player's max health - how many hearts to let the player collect before it doesn't count.
     playerXPosition = (128 << PLAYER_POSITION_SHIFT); // X position on the screen to start (increasing numbers as you go left to right. Just change the number)
     playerYPosition = (128 << PLAYER_POSITION_SHIFT); // Y position on the screen to start (increasing numbers as you go top to bottom. Just change the number)
     playerDirection = SPRITE_DIRECTION_DOWN; // What direction to have the player face to start.
