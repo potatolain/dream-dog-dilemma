@@ -33,6 +33,10 @@ void draw_win_screen(void) {
     vram_adr(0x2000);
     vram_unrle(ending);
 
+    vram_adr(NTADR_A(11, 26));
+    vram_put(('0' - 0x20) + (playerDeathCount / 10));
+    vram_put(('0' - 0x20) + (playerDeathCount % 10));
+
 
     // Hide all existing sprites
     oam_clear();

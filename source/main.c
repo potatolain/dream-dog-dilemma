@@ -41,7 +41,6 @@ void initialize_variables(void) {
 
     currentWorldId = WORLD_OVERWORLD; // The ID of the world to load.
     currentLayer = 0;
-    playerDeathCount = 0;
 
     lastCheckpointScreenId = playerOverworldPosition;
     lastCheckpointLayer = currentLayer;
@@ -84,6 +83,7 @@ void main(void) {
 
                 banked_call(PRG_BANK_TITLE, draw_intro);
                 banked_call(PRG_BANK_TITLE, draw_warning);
+                playerDeathCount = 0;
 
                 music_stop();
                 fade_out();

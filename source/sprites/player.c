@@ -217,6 +217,14 @@ const unsigned char* million =  "I always said I'd live in a   "
 const unsigned char* dogdogdog ="There is a puppy in that      "
                                 "building!!!!";
 
+const unsigned char* corruptWarn =
+                                "If you touch that radio over  "
+                                "there, sometimes the screen   "
+                                "shakes! It's disorienting...  "
+                                
+                                "Huh? What's a screen? I meant "
+                                "the world! Too much coding    "
+                                "today...";
 
 const unsigned char screenKeyCounts[] = {
     1, 2, 2, 0, 3, 0, 2, 0,
@@ -230,7 +238,7 @@ const unsigned char screenKeyCounts[] = {
 };
 
 const unsigned char** screenMessages[] = {
-    &firstPageText,     &escapers,      0,              0,              0,              0,              0,              0,
+    &firstPageText,     &escapers,      0,              0,              &corruptWarn,   0,              0,              0,
     &secondPageText,    0,              0,              0,              &whyIsTheDesert,&bigComputer,   &desssert,      0,
     0,                  0,              0,              &cottage,       0,              0,              0,              0,
     0,                  0,              0,              0,              &oasis,         0,              0,              0,
@@ -241,7 +249,7 @@ const unsigned char** screenMessages[] = {
 };
 
 const unsigned char screenDimensions[] = {
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 1, 3, 2, 0,
     0, 0, 0, 1, 0, 0, 0, 0,
     0, 0, 0, 0, 2, 0, 0, 0,
@@ -290,6 +298,9 @@ void damage_player(unsigned char dmg, unsigned char doBounceAndSfx) {
     // Since playerHealth is unsigned, we need to check for wraparound damage. 
     // NOTE: If something manages to do more than 16 damage at once, this might fail.
     if (playerHealth == 0 || playerHealth > 240) {
+        if (playerDeathCount < 99) {
+            ++playerDeathCount;
+        }
         gameState = GAME_STATE_GAME_OVER;
         if (doBounceAndSfx) { sfx_play(SFX_HURT, SFX_CHANNEL_2); }
         music_stop();
@@ -792,8 +803,6 @@ void handle_player_sprite_collision(void) {
 
 
                     memcpy(&(lastCheckpointWorldState[0]), &(currentMapSpritePersistance[0]), 64);
-
-                    ++playerDeathCount;
 
                     break;
                 }
