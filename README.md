@@ -1,4 +1,4 @@
-# LD49 Game
+# Dream Dog Dilemma
 
 TBD, created with [NES Starter Kit](https://cppchriscpp.github.io/nes-starter-kit/).
 
