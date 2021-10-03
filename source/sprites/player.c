@@ -168,8 +168,8 @@ const unsigned char screenKeyCounts[] = {
 };
 
 const unsigned char** screenMessages[] = {
-    &firstPageText,     0,              0,              0,              0,              0,              0,              0,
-    &secondPageText,    &escapers,      0,              0,              &whyIsTheDesert,&bigComputer,   &desssert,      0,
+    &firstPageText,     &escapers,      0,              0,              0,              0,              0,              0,
+    &secondPageText,    0,              0,              0,              &whyIsTheDesert,&bigComputer,   &desssert,      0,
     0,                  0,              0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              &oasis,         0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0,
@@ -180,7 +180,7 @@ const unsigned char** screenMessages[] = {
 
 const unsigned char screenDimensions[] = {
     0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 4, 3, 2, 0,
+    0, 0, 0, 0, 1, 3, 2, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,

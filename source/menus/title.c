@@ -50,5 +50,7 @@ void handle_title_input(void) {
 				playerOverworldPosition = 14;
 			}
 		#endif
+
+		sfx_play(SFX_PAUSE_UP, SFX_CHANNEL_1);
 	}
 }

@@ -98,7 +98,7 @@ void main(void) {
                 set_rand(frameCount);
                 
                 // Map drawing is complete; let the player play the game!
-                music_play(SONG_OVERWORLD);
+                music_play(SONG_LAYERS + currentLayer);
                 fade_in();
                 gameState = GAME_STATE_RUNNING;
                 break;
