@@ -8,7 +8,7 @@
 // We make our 16x16 sprites a little bit smaller than they appear, so collisions with them are
 // less likely. This makes getting hit by enemies less likely. This is only for collisions with
 // the player.
-#define SPRITE_HITBOX_OFFSET 24
+#define SPRITE_HITBOX_OFFSET 64
 // This does the same thing, but only for sprite collisions with tiles.
 #define SPRITE_TILE_HITBOX_OFFSET 10
 

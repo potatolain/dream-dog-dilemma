@@ -363,8 +363,9 @@ void update_map_sprites(void) {
 
             // For 16x16 enemy sprites, make their hitbox a bit smaller
             if (currentSpriteType == SPRITE_TYPE_REGULAR_ENEMY || currentSpriteType == SPRITE_TYPE_INVULNERABLE_ENEMY) {
-                sprX -= SPRITE_HITBOX_OFFSET;
-                sprY -= SPRITE_HITBOX_OFFSET;
+                sprX += SPRITE_HITBOX_OFFSET;
+                sprY += SPRITE_HITBOX_OFFSET;
+                currentSpriteFullWidth -= 2*SPRITE_HITBOX_OFFSET;
             } else if (currentSpriteType == SPRITE_TYPE_LOCKED_DOOR) {
                 sprX -= SPRITE_HITBOX_OFFSET;
                 sprY -= SPRITE_HITBOX_OFFSET;
