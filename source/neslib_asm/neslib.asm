@@ -35,6 +35,7 @@
 
 	.export _split_y,_reset,_wait_for_sprite0_hit
 
+.import _do_ppu_mess
 
 ;NMI handler
 
@@ -163,6 +164,11 @@ nmi_update:
 	lda #0
 	sta <FRAME_CNT2
 
+	; MEGA SUPER DUPER ULTRA HACK 3000
+	; If you're in-game, and in a later dimension, sometimes* flip the ppu scroll randomly for a scanline or 3
+	jsr _do_ppu_mess
+
+
 @skipNtsc:
     ; Bank swapping time! Switch to the music bank for sfx, etc...
     lda BP_BANK
@@ -172,8 +178,8 @@ nmi_update:
     jsr _set_prg_bank_raw
 
 	;play music, the code is modified to put data into output buffer instead of APU registers
-    
 
+    
 	lda <MUSIC_PLAY
 	ror
 	bcc :+
@@ -187,6 +193,7 @@ nmi_update:
 	lda #$00
 	sta <BUF_4008
 :
+
 
 	;process all sound effect streams
 	

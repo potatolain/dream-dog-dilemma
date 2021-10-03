@@ -204,3 +204,44 @@ void main(void) {
         
     }
 }
+
+
+
+// HACK: I kinda just threw this somewhere...
+// NOTE: DO NOT USE ANY BUILD-IN VARS HERE FOR SCRATCH STORAGE. THIS RUNS DURING NMI
+ZEROPAGE_DEF(unsigned char, derp);
+void __fastcall__ do_ppu_mess(void) {
+    if (gameState != GAME_STATE_RUNNING) {
+        return;
+    }
+    if (currentLayer == 3) {
+        if ((frameCount & 0xf0) == 0x10) {
+            derp = rand8();
+            //*(unsigned char*)0x2000 = 0;
+            __asm__("lda $2002");
+            *(unsigned char*)0x2005 = derp;
+            *(unsigned char*)0x2005 = rand8();
+
+            // scroll(rand8(), rand8());
+            for (derp = 0; derp < 200; ++derp) {
+                __asm__("nop");
+            }
+        }
+    }
+
+    if (currentLayer == 4) {
+        if ((frameCount & 0xf0) > 0xb0) {
+            derp = rand8();
+            //*(unsigned char*)0x2000 = 0;
+            __asm__("lda $2002");
+            *(unsigned char*)0x2005 = derp;
+            *(unsigned char*)0x2005 = rand8();
+
+            // scroll(rand8(), rand8());
+            for (derp = 0; derp < 200; ++derp) {
+                __asm__("nop");
+            }
+        }
+
+    }
+}
