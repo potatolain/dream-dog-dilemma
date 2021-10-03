@@ -80,6 +80,8 @@ void main(void) {
                 break;
             case GAME_STATE_POST_TITLE:
 
+                banked_call(PRG_BANK_TITLE, draw_intro);
+
                 music_stop();
                 fade_out();
                 load_map();

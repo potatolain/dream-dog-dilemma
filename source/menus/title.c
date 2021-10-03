@@ -7,6 +7,9 @@
 #include "source/graphics/palettes.h"
 #include "source/configuration/game_info.h"
 #include "source/map/map.h"
+#include "graphics/intro.h"
+#include "source/menus/input_helpers.h"
+#include "source/graphics/fade_animation.h"
 
 CODE_BANK(PRG_BANK_TITLE);
 
@@ -53,4 +56,17 @@ void handle_title_input(void) {
 
 		sfx_play(SFX_PAUSE_UP, SFX_CHANNEL_1);
 	}
+}
+
+void draw_intro(void) {
+	fade_out();
+	ppu_off();
+	vram_adr(0x2000);
+	vram_unrle(intro);
+	ppu_on_all();
+	fade_in();
+
+	banked_call(PRG_BANK_MENU_INPUT_HELPERS, wait_for_start);
+
+	sfx_play(SFX_PAUSE_UP, SFX_CHANNEL_1);
 }

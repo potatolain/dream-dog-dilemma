@@ -2,3 +2,4 @@
 
 void draw_title_screen(void);
 void handle_title_input(void);
+void draw_intro(void);
