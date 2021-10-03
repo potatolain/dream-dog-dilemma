@@ -117,8 +117,8 @@ const unsigned char* secondPageOtherDimensionText =
 
 const unsigned char* whyIsTheDesert = 
                                 "I have been trapped out here  "
-                                "for ages. It's just desert as "
-                                "far as the eyes can see!      "
+                                "for ages. It's just nothing.  "
+                                "the empty space goes forever! "
 
                                 "I'm not getting the free      "
                                 "balloon the doctor promised me"
@@ -126,12 +126,41 @@ const unsigned char* whyIsTheDesert =
 
                                 "experiment, am I?";
 
+const unsigned char* bigComputer = 
+                                "Sometimes I feel like I am    "
+                                "trapped in a huge computer.";
+
+const unsigned char* desssert = 
+                                "I've been wandering in this   "
+                                "desert forever                "
+                                "                              "
+
+                                "I should have known something "
+                                "was amiss when I was offered  "
+                                "endless desert.               "
+
+                                "I also really need to learn to"
+                                "spell.";
+
+const unsigned char* escapers = 
+                                "What if those monsters escape?"
+                                "I'm so scared!                "
+                                "                              "
+
+                                "They promised me it would help"
+                                "FoE! I guess this helps these "
+                                "foes...                       "
+                                
+                                "English is an evil language.  ";
+
+const unsigned char* oasis =    "Never trust a doctor that     "
+                                "promises you your own oasis.  ";
 
 const unsigned char screenKeyCounts[] = {
     1, 2, 2, 0, 3, 0, 2, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 3, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -140,9 +169,9 @@ const unsigned char screenKeyCounts[] = {
 
 const unsigned char** screenMessages[] = {
     &firstPageText,     0,              0,              0,              0,              0,              0,              0,
-    &secondPageText,    0,              0,              0,              0,              0,              &whyIsTheDesert,0,
+    &secondPageText,    &escapers,      0,              0,              &whyIsTheDesert,&bigComputer,   &desssert,      0,
     0,                  0,              0,              0,              0,              0,              0,              0,
-    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  0,              0,              0,              &oasis,         0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0,
@@ -151,9 +180,9 @@ const unsigned char** screenMessages[] = {
 
 const unsigned char screenDimensions[] = {
     0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 2, 0,
+    0, 0, 0, 0, 4, 3, 2, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -780,6 +809,8 @@ void handle_player_sprite_collision(void) {
                         } else {
                             trigger_game_text(*screenMessages[playerOverworldPosition], 1);
                         }
+                    } else {
+                        trigger_game_text(defaultText, screenDimensions[playerOverworldPosition] != currentLayer);
                     }
                 }
                 break;
