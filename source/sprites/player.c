@@ -156,12 +156,32 @@ const unsigned char* escapers =
 const unsigned char* oasis =    "Never trust a doctor that     "
                                 "promises you your own oasis.  ";
 
+const unsigned char* trapped =  "\"Just put this on quick\" he   "
+                                "said. Simple experiment, he   "
+                                "said.                         "
+                                "He said everyone would leave  "
+                                "me alone after. I didn't think"
+                                "he meant like this!";
+
+
+const unsigned char* cottage =  "I always wanted my own seaside"
+                                "cottage!                      "
+                                "                              "
+
+                                "I just thought it might be,   "
+                                "you know, the real world.     "
+                                "                              "
+
+                                "I should have known their     "
+                                "offer was too good to be true.";
+
+
 const unsigned char screenKeyCounts[] = {
     1, 2, 2, 0, 3, 0, 2, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 3, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 4, 3, 0, 0, 0,
+    0, 0, 0, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
@@ -170,9 +190,9 @@ const unsigned char screenKeyCounts[] = {
 const unsigned char** screenMessages[] = {
     &firstPageText,     &escapers,      0,              0,              0,              0,              0,              0,
     &secondPageText,    0,              0,              0,              &whyIsTheDesert,&bigComputer,   &desssert,      0,
-    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  0,              0,              &cottage,       0,              0,              0,              0,
     0,                  0,              0,              0,              &oasis,         0,              0,              0,
-    0,                  0,              0,              0,              0,              0,              0,              0,
+    0,                  0,              0,              0,              &trapped,       0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0,
     0,                  0,              0,              0,              0,              0,              0,              0
@@ -181,9 +201,9 @@ const unsigned char** screenMessages[] = {
 const unsigned char screenDimensions[] = {
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 1, 3, 2, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 1, 0, 0, 0, 0,
     0, 0, 0, 0, 2, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 2, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0
