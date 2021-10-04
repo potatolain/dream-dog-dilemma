@@ -551,6 +551,7 @@ void do_scroll_screen_transition(void) {
     yScrollPosition = 0;
     scroll(0, 240 - HUD_PIXEL_HEIGHT);
     
+    
     // Draw a sprite into 0 to give us something to split on
     oam_spr(249, HUD_PIXEL_HEIGHT-NES_SPRITE_HEIGHT-0, HUD_SPRITE_ZERO_TILE_ID, 0x00, 0);
     ppu_wait_nmi();
